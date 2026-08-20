@@ -1,0 +1,72 @@
+<div class="entities-page">
+  <header class="entities-header">
+    <div>
+      <h1>Entidades</h1>
+      <p>Estructura jerárquica de entidades y sus niveles (sin límite de profundidad).</p>
+    </div>
+    <p-button label="Nueva Entidad" icon="pi pi-plus" (onClick)="openCreateDialog()" />
+  </header>
+
+  <div class="table-card">
+    <p-treetable [value]="treeNodes()" [loading]="loading()" styleClass="entities-table">
+      <ng-template #header>
+        <tr>
+          <th>Nombre</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-rowNode let-entity="rowData">
+        <tr [ttRow]="rowNode">
+          <td>
+            <div class="name-cell" [ngStyle]="nameCellStyle(rowNode.level)">
+              <p-treeTableToggler [rowNode]="rowNode" />
+              {{ entity.name }}
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template #emptymessage>
+        <tr>
+          <td class="empty-row">No hay entidades registradas.</td>
+        </tr>
+      </ng-template>
+    </p-treetable>
+  </div>
+</div>
+
+<p-dialog
+  header="Nueva Entidad"
+  [modal]="true"
+  [visible]="showCreateDialog()"
+  (visibleChange)="showCreateDialog.set($event)"
+  [style]="{ width: '36rem' }"
+>
+  <form class="create-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="field-group">
+      <label for="name">Nombre</label>
+      <input id="name" type="text" pInputText formControlName="name" placeholder="Ej. Recursos Humanos" [class.invalid]="isInvalid('name')" />
+    </div>
+
+    <div class="field-group">
+      <label for="parentId">Entidad Padre</label>
+      <p-select
+        inputId="parentId"
+        formControlName="parentId"
+        [options]="parentOptions()"
+        optionLabel="label"
+        optionValue="id"
+        placeholder="Seleccionar entidad padre..."
+        [class.invalid]="isInvalid('parentId')"
+        appendTo="body"
+      />
+    </div>
+
+    @if (errorMessage()) {
+      <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
+    }
+
+    <div class="form-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="closeCreateDialog()" />
+      <p-button type="submit" [label]="submitting() ? 'Guardando...' : 'Guardar Entidad'" [loading]="submitting()" />
+    </div>
+  </form>
+</p-dialog>

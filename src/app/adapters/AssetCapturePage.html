@@ -1,0 +1,218 @@
+<div class="capture-page">
+  <header class="capture-header">
+    <div>
+      <h1>Captura de Bienes Informáticos</h1>
+      <p>Registrá un nuevo equipo en el inventario.</p>
+    </div>
+  </header>
+
+  <form class="capture-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="form-grid">
+      <div class="field-group">
+        <label for="name">Nombre</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="DAP-000"
+          [class.invalid]="isInvalid('name')"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="user">Usuario</label>
+        <p-select
+          inputId="user"
+          formControlName="user"
+          [options]="userOptions()"
+          placeholder="Seleccionar usuario..."
+          [class.invalid]="isInvalid('user')"
+          appendTo="body"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="entity">Entidad</label>
+        <p-select
+          inputId="entity"
+          formControlName="entity"
+          [options]="entityOptions()"
+          placeholder="Seleccionar entidad..."
+          [class.invalid]="isInvalid('entity')"
+          appendTo="body"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="manufacturer">Fabricante</label>
+        <p-select
+          inputId="manufacturer"
+          formControlName="manufacturer"
+          placeholder="Selecciona un fabricante"
+          [class.invalid]="isInvalid('manufacturer')"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="serialNumber">Número de serie</label>
+        <input
+          id="serialNumber"
+          type="text"
+          formControlName="serialNumber"
+          placeholder="LNV0001"
+          [class.invalid]="isInvalid('serialNumber')"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="inventoryNumber">Número de inventario</label>
+        <input
+          id="inventoryNumber"
+          type="text"
+          formControlName="inventoryNumber"
+          placeholder="123456"
+          [class.invalid]="isInvalid('inventoryNumber')"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="type">Tipo</label>
+        <input
+          id="type"
+          type="text"
+          formControlName="type"
+          placeholder="Desktop"
+          [class.invalid]="isInvalid('type')"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="model">Modelo</label>
+        <p-select
+          inputId="model"
+          formControlName="model"
+          placeholder="HP ProBook 440"
+          [class.invalid]="isInvalid('model')"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="operatingSystem">Sistema Operativo - Nombre</label>
+        <input
+          id="operatingSystem"
+          type="text"
+          formControlName="operatingSystem"
+          placeholder="Microsoft Windows 10"
+          [class.invalid]="isInvalid('operatingSystem')"
+        />
+      </div>
+      <div class="field-group">
+        <label for="location">Ubicación</label>
+        <p-select
+          inputId="location"
+          formControlName="location"
+          [options]="locationOptions()"
+          placeholder="Seleccionar ubicación..."
+          [class.invalid]="isInvalid('location')"
+          appendTo="body"
+        />
+      </div>
+      <div class="field-group">
+        <label for="processor">Componentes - Procesador</label>
+        <input
+          id="processor"
+          type="text"
+          formControlName="processor"
+          placeholder="Intel Core i7"
+          [class.invalid]="isInvalid('processor')"
+        />
+      </div>
+      <div class="field-group">
+        <label for="memoryRAM">Componentes - Memoria RAM</label>
+        <input
+          id="memoryRAM"
+          type="text"
+          formControlName="memoryRAM"
+          placeholder="16 GB"
+          [class.invalid]="isInvalid('memoryRAM')"
+        />
+      </div>
+      <div class="field-group">
+        <label for="hardDiskType">Componentes - Disco Duro Tipo</label>
+        <input
+          id="hardDiskType"
+          type="text"
+          formControlName="hardDiskType"
+          placeholder="512 GB"
+          [class.invalid]="isInvalid('hardDiskType')"
+        />
+      </div>
+      <div class="field-group">
+        <label for="hardDiskCapacity">Componentes - Disco Duro Capacidad predeterminada</label>
+        <input
+          id="hardDiskCapacity"
+          type="text"
+          formControlName="hardDiskCapacity"
+          placeholder="512 GB"
+          [class.invalid]="isInvalid('hardDiskCapacity')"
+        />
+      </div>
+      <div class="field-group">
+        <label for="processorNumber">Componentes - Procesador: número de núcleos</label>
+        <input
+          id="processorNumber"
+          type="text"
+          formControlName="processorNumber"
+          placeholder="6"
+          [class.invalid]="isInvalid('processorNumber')"
+        />
+      </div>
+      <div class="field-group">
+        <label for="networkAddress">Redes - Dirección IP</label>
+        <input
+          id="networkAddress"
+          type="text"
+          formControlName="networkAddress"
+          placeholder="192.168.0.1"
+          [class.invalid]="isInvalid('networkAddress')"
+        />
+      </div>
+      <div class="field-group">
+        <label for="macAddress">Componentes - Dirección MAC</label>
+        <input
+          id="macAddress"
+          type="text"
+          formControlName="macAddress"
+          placeholder="00:1A:2B:3C:4D:5E"
+          [class.invalid]="isInvalid('macAddress')"
+        />
+      </div>
+      <div class="field-group">
+        <label for="macAddressNetwork">Redes - Dirección MAC</label>
+        <input
+          id="macAddressNetwork"
+          type="text"
+          formControlName="macAddressNetwork"
+          placeholder="00:1A:2B:3C:4D:5E"
+          [class.invalid]="isInvalid('macAddressNetwork')"
+        />
+      </div>
+    </div>
+
+    @if (successMessage()) {
+      <p-message severity="success" [text]="successMessage()!" styleClass="w-full" />
+    }
+    @if (errorMessage()) {
+      <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
+    }
+
+    <div class="form-actions">
+      <p-button
+        type="submit"
+        [label]="submitting() ? 'Guardando...' : 'Registrar equipo'"
+        icon="pi pi-save"
+        [loading]="submitting()"
+      />
+    </div>
+  </form>
+</div>

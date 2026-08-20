@@ -1,0 +1,102 @@
+<div class="consultation-page">
+  <header class="consultation-header">
+    <div>
+      <h1>Consulta de Equipos</h1>
+      <p>Búsqueda avanzada del parque informático por usuario, entidad o ubicación.</p>
+    </div>
+  </header>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-label">Total de Equipos</span>
+      <span class="stat-value">{{ total() }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Resultados de la Consulta</span>
+      <span class="stat-value">{{ resultCount() }}</span>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="filters-bar">
+      <p-iconfield class="search-field">
+        <p-inputicon styleClass="pi pi-search" />
+        <input
+          type="text"
+          pInputText
+          placeholder="Buscar por nombre..."
+          [value]="nameFilter()"
+          (input)="onNameFilterInput($any($event.target).value)"
+        />
+      </p-iconfield>
+
+      <p-select
+        [options]="userOptions()"
+        placeholder="Todos los usuarios"
+        [showClear]="true"
+        [ngModel]="userFilter()"
+        (onChange)="userFilter.set($event.value)"
+        (onClear)="userFilter.set(null)"
+        styleClass="filter-select"
+      />
+
+      <p-select
+        [options]="entityOptions()"
+        placeholder="Todas las entidades"
+        [showClear]="true"
+        [ngModel]="entityFilter()"
+        (onChange)="entityFilter.set($event.value)"
+        (onClear)="entityFilter.set(null)"
+        styleClass="filter-select"
+      />
+
+      <p-select
+        [options]="locationOptions()"
+        placeholder="Todas las ubicaciones"
+        [showClear]="true"
+        [ngModel]="locationFilter()"
+        (onChange)="locationFilter.set($event.value)"
+        (onClear)="locationFilter.set(null)"
+        styleClass="filter-select"
+      />
+
+      @if (hasActiveFilters()) {
+        <p-button label="Limpiar filtros" icon="pi pi-filter-slash" severity="secondary" [outlined]="true" (onClick)="clearFilters()" />
+      }
+    </div>
+
+    <div class="table-scroll">
+      <p-table [value]="filteredAssets()" [loading]="loading()" styleClass="assets-table">
+        <ng-template #header>
+          <tr>
+            <th>Nombre</th>
+            <th>Usuario</th>
+            <th>Entidad</th>
+            <th>Ubicación</th>
+            <th>Tipo</th>
+            <th>Modelo</th>
+            <th>N.° de Serie</th>
+            <th>N.° de Inventario</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-asset>
+          <tr>
+            <td class="name-cell">{{ asset.name }}</td>
+            <td>{{ asset.user }}</td>
+            <td>{{ asset.entity }}</td>
+            <td>{{ asset.location }}</td>
+            <td>{{ asset.type }}</td>
+            <td>{{ asset.model }}</td>
+            <td>{{ asset.serialNumber }}</td>
+            <td>{{ asset.inventoryNumber }}</td>
+          </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+          <tr>
+            <td colspan="8" class="empty-row">No se encontraron equipos con estos criterios.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,152 @@
+:host {
+  --primary:            #620b27;
+  --primary-strong:     #80243d;
+  --on-surface:         #1b1c1c;
+  --on-surface-variant: #554245;
+  --surface-low:        #fff0f1;
+  --surface-high:       #f5e4e6;
+  --outline:            #dbc0c3;
+
+  display: block;
+  font-family: "Inter", "Public Sans", "Segoe UI", sans-serif;
+  color: var(--on-surface);
+}
+
+.locations-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.locations-header h1 {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.locations-header p {
+  margin: 0;
+  color: var(--on-surface-variant);
+}
+
+:host ::ng-deep .locations-header .p-button {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%);
+  border: none;
+  font-weight: 600;
+}
+
+.table-card {
+  background: #ffffff;
+  border: 1px solid var(--outline);
+  border-radius: 0.9rem;
+  overflow: hidden;
+}
+
+.building-cell {
+  font-weight: 600;
+}
+
+.floor-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--surface-high);
+  color: var(--primary);
+}
+
+.floor-badge--none {
+  background: transparent;
+  color: var(--on-surface-variant);
+  padding-left: 0;
+}
+
+.empty-row {
+  text-align: center;
+  padding: 2rem;
+  color: var(--on-surface-variant);
+}
+
+:host ::ng-deep .locations-table .p-datatable-thead > tr > th {
+  background: var(--surface-low);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--on-surface-variant);
+}
+
+/* --- Create location dialog ---------------------------------------- */
+.create-form {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.field-group {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.field-group--inline {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.checkbox-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--on-surface);
+  cursor: pointer;
+}
+
+.field-group label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--on-surface-variant);
+}
+
+.field-group input {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.98rem;
+}
+
+.field-group input.invalid {
+  border-color: #e57f72;
+}
+
+:host ::ng-deep .field-group .p-select {
+  width: 100%;
+  font-size: 0.98rem;
+}
+
+:host ::ng-deep .field-group .p-select .p-select-label {
+  padding: 0.75rem 0.9rem;
+}
+
+:host ::ng-deep .field-group--inline .p-checkbox {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+:host ::ng-deep .form-actions .p-button:not(.p-button-outlined) {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%);
+  border: none;
+  font-weight: 600;
+}

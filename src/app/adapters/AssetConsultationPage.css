@@ -1,0 +1,128 @@
+:host {
+  --primary:            #620b27;
+  --primary-strong:     #80243d;
+  --on-surface:         #1b1c1c;
+  --on-surface-variant: #554245;
+  --surface-low:        #fff0f1;
+  --outline:            #dbc0c3;
+
+  display: block;
+  font-family: "Inter", "Public Sans", "Segoe UI", sans-serif;
+  color: var(--on-surface);
+}
+
+.consultation-header {
+  margin-bottom: 1.5rem;
+}
+
+.consultation-header h1 {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.consultation-header p {
+  margin: 0;
+  color: var(--on-surface-variant);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  max-width: 32rem;
+}
+
+.stat-card {
+  background: #ffffff;
+  border: 1px solid var(--outline);
+  border-radius: 0.75rem;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 7rem;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--on-surface-variant);
+}
+
+.stat-value {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.table-card {
+  background: #ffffff;
+  border: 1px solid var(--outline);
+  border-radius: 0.9rem;
+  overflow: hidden;
+}
+
+.filters-bar {
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--outline);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.search-field {
+  flex: 1;
+  min-width: 14rem;
+}
+
+:host ::ng-deep .search-field input {
+  width: 100%;
+}
+
+:host ::ng-deep .filter-select {
+  min-width: 13rem;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.name-cell {
+  font-weight: 700;
+  color: var(--on-surface);
+  white-space: nowrap;
+}
+
+.empty-row {
+  text-align: center;
+  padding: 2rem;
+  color: var(--on-surface-variant);
+}
+
+:host ::ng-deep .assets-table .p-datatable-thead > tr > th {
+  background: var(--surface-low);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--on-surface-variant);
+  white-space: nowrap;
+}
+
+:host ::ng-deep .assets-table .p-datatable-tbody > tr > td {
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
+
+:host ::ng-deep .filters-bar .p-button {
+  border-color: var(--outline);
+  color: var(--primary);
+  font-weight: 600;
+}

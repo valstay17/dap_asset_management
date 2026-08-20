@@ -1,0 +1,66 @@
+<div class="login-canvas">
+  <div class="blur-circle blur-circle-left"></div>
+  <div class="blur-circle blur-circle-right"></div>
+
+  <div class="login-wrapper">
+    <div class="brand-header">
+      <div class="brand-logo">
+        <span class="material-symbols-outlined">account_balance_wallet</span>
+      </div>
+      <h1>Dirección de Alumbrado Público</h1>
+      <p>Área de Tecnologías de la Información</p>
+    </div>
+
+    <div class="login-card">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="field-group">
+          <label for="username">Usuario</label>
+          <div class="input-shell" [class.invalid]="isInvalid('username')">
+            <span class="material-symbols-outlined">person</span>
+            <input
+                pInputText
+                id="username"
+                formControlName="username"
+                placeholder="nombre.apellido"
+                autocomplete="username"
+                class="pw-bare-input"
+            />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label-row">
+            <label for="password">Contraseña</label>
+          </div>
+          <div class="input-shell" [class.invalid]="isInvalid('password')">
+            <span class="material-symbols-outlined">lock</span>
+            <p-password
+              inputId="password"
+              formControlName="password"
+              class="pw-bare"
+              inputStyleClass="pw-bare-input"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              [feedback]="false"
+              [toggleMask]="true"
+            />
+          </div>
+        </div>
+
+
+        @if (errorMessage()) {
+          <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
+        }
+
+        <p-button
+            type="submit"
+            styleClass="submit-btn w-full"
+            [label]="submitting() ? 'Ingresando...' : 'Iniciar Sesión'"
+            [loading]="submitting()"
+            [style]="{ background: 'linear-gradient(135deg,#620b27 0%,#80243d 100%)', border: 'none', width: '100%' }"
+        />
+      </form>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,356 @@
+:host {
+  --primary:            #620b27;
+  --primary-strong:     #80243d;
+  --secondary:          #795926;
+  --on-surface:         #1b1c1c;
+  --on-surface-variant: #554245;
+  --surface:            #fbf9f8;
+  --surface-low:        #fff0f1;
+  --surface-high:       #f5e4e6;
+  --outline:            #dbc0c3;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background-color: var(--surface);
+  color: var(--on-surface);
+  font-family: "Inter", "Public Sans", "Segoe UI", sans-serif;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- Navbar (p-toolbar) ----------------------------------- */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 50;
+  transition: all 0.3s ease;
+}
+
+:host ::ng-deep .navbar .p-toolbar {
+  backdrop-filter: blur(12px);
+  background-color: rgba(251, 249, 248, 0.85);
+  border: none;
+  border-radius: 0;
+  padding: 0 clamp(1.25rem, 4vw, 2rem);
+  height: 3rem;
+  min-height: unset;
+  transition: all 0.3s ease;
+}
+
+:host ::ng-deep .navbar.scrolled .p-toolbar {
+  height: 3.5rem;
+  box-shadow: 0 4px 20px rgba(98, 11, 39, 0.1);
+}
+
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.3rem 0.6rem 0.3rem 0.9rem;
+  border: none;
+  background: transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+  transition: background-color 0.2s;
+}
+
+.navbar-user:hover {
+  background-color: var(--surface-low);
+}
+
+.navbar-username {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--on-surface);
+  white-space: nowrap;
+}
+
+:host ::ng-deep .navbar-user .p-avatar {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%);
+  color: #fff;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .navbar-nav,
+  .navbar-username {
+    display: none;
+  }
+}
+
+/* --- User menu (p-popover) --------------------------------- */
+:host ::ng-deep .p-popover .p-popover-content {
+  padding: 0.5rem;
+}
+
+.user-menu {
+  min-width: 12rem;
+}
+
+.user-menu-header {
+  padding: 0.4rem 0.6rem 0.75rem;
+  margin-bottom: 0.35rem;
+  border-bottom: 1px solid var(--outline);
+}
+
+.user-menu-name {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.user-menu-email {
+  margin: 0.15rem 0 0;
+  font-size: 0.78rem;
+  color: var(--on-surface-variant);
+}
+
+.user-menu-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.user-menu-logout:hover {
+  background-color: var(--surface-low);
+}
+
+.user-menu-logout .material-symbols-outlined {
+  font-size: 1.1rem;
+}
+
+/* --- Main ------------------------------------------------- */
+.dashboard-main {
+  flex-grow: 1;
+  padding-block: 7rem 5rem;
+  padding-inline: clamp(1.25rem, 4vw, 3rem);
+  max-width: 90rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.dashboard-heading { margin-bottom: 3rem; }
+
+.dashboard-heading h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  color: var(--on-surface);
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+}
+
+.dashboard-heading p {
+  color: var(--on-surface-variant);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* --- Grid --------------------------------------------------
+   auto-fit + minmax: la cantidad de columnas se adapta de forma
+   continua al ancho de la ventana en vez de saltar entre 2-3
+   breakpoints fijos. */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  align-items: stretch;
+}
+
+/* --- Card (p-card) ---------------------------------------- */
+.dashboard-card {
+  display: block;
+  height: 100%;
+}
+
+:host ::ng-deep .dashboard-card .p-card {
+  height: 100%;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 30px rgba(98, 11, 39, 0.04);
+  border: 1px solid rgba(219, 192, 195, 0.35);
+  transition: box-shadow 0.3s ease;
+}
+
+:host ::ng-deep .dashboard-card:hover .p-card {
+  box-shadow: 0 10px 30px rgba(98, 11, 39, 0.14);
+}
+
+:host ::ng-deep .dashboard-card .p-card-body,
+:host ::ng-deep .metric-card .p-card-body {
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  height: 100%;
+}
+
+:host ::ng-deep .dashboard-card .p-card-content,
+:host ::ng-deep .metric-card .p-card-content {
+  padding: 0;
+  height: 100%;
+}
+
+.card-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+}
+
+.card-icon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  background-color: var(--surface-low);
+  color: var(--primary);
+  transition: background 0.3s, color 0.3s;
+}
+
+.card-icon .material-symbols-outlined { font-size: 2rem; }
+
+:host ::ng-deep .dashboard-card:hover .card-icon {
+  background-color: var(--primary-strong);
+  color: white;
+}
+
+:host ::ng-deep .dashboard-card:hover .card-icon .material-symbols-outlined {
+  transform: translateY(-4px) scale(1.1);
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  letter-spacing: -0.01em;
+  margin: 0 0 0.75rem;
+}
+
+.card-description {
+  color: var(--on-surface-variant);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 0 0 2rem;
+  flex-grow: 1;
+}
+
+/* Botón Acceder */
+.card-btn { margin-top: auto; width: 100%; }
+
+:host ::ng-deep .card-btn .p-button {
+  width: 100%;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%);
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(98, 11, 39, 0.2);
+  transition: transform 0.14s, box-shadow 0.2s;
+}
+
+:host ::ng-deep .card-btn .p-button:hover {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(98, 11, 39, 0.3);
+}
+
+/* --- Metric card (p-card) ---------------------------------- */
+.metric-card {
+  display: block;
+  height: 100%;
+}
+
+:host ::ng-deep .metric-card .p-card {
+  height: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(219, 192, 195, 0.4);
+  background: linear-gradient(135deg, #fbeaeb 0%, var(--surface-high) 100%);
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+:host ::ng-deep .metric-card:hover .p-card {
+  box-shadow: 0 10px 30px rgba(98, 11, 39, 0.1);
+}
+
+.metric-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.metric-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--secondary);
+  margin-bottom: 1rem;
+}
+
+.metric-number {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--on-surface);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.metric-text { color: var(--on-surface-variant); font-weight: 500; margin: 0; }
+
+.metric-glow {
+  position: absolute;
+  right: -3rem;
+  bottom: -3rem;
+  width: 12rem;
+  height: 12rem;
+  background: rgba(98, 11, 39, 0.06);
+  border-radius: 50%;
+  filter: blur(2rem);
+  transition: transform 0.7s;
+}
+
+:host ::ng-deep .metric-card:hover .metric-glow { transform: scale(1.25); }
+
+/* --- Footer ----------------------------------------------- */
+.dashboard-footer {
+  width: 100%;
+  padding: 1.5rem clamp(1.25rem, 4vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  background-color: var(--surface-high);
+  border-top: 1px solid rgba(219, 192, 195, 0.35);
+}
+
+@media (min-width: 700px) {
+  .dashboard-footer { flex-direction: row; justify-content: space-between; }
+}
+
+.footer-brand { font-weight: 700; font-size: 1.1rem; color: var(--on-surface); margin: 0 0 0.25rem; }
+.footer-copy  { font-size: 0.75rem; color: var(--on-surface-variant); letter-spacing: 0.04em; margin: 0; }
+

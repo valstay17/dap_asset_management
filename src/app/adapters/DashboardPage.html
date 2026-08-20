@@ -1,0 +1,81 @@
+<!-- Navbar -->
+<p-toolbar class="navbar" [class.scrolled]="isScrolled">
+  <ng-template #start>
+    <div class="navbar-actions">
+      <p-button icon="pi pi-bell" severity="secondary" [text]="true" [rounded]="true" />
+      <p-button icon="pi pi-cog"  severity="secondary" [text]="true" [rounded]="true" />
+    </div>
+  </ng-template>
+  <ng-template #end>
+    <button type="button" class="navbar-user" (click)="userMenu.toggle($event)">
+      <span class="navbar-username">{{ user()?.name }}</span>
+      <p-avatar [label]="userInitials()" shape="circle" />
+    </button>
+
+    <p-popover #userMenu>
+      <div class="user-menu">
+        <div class="user-menu-header">
+          <p class="user-menu-name">{{ user()?.name }}</p>
+          <p class="user-menu-email">{{ user()?.email }}</p>
+        </div>
+        <button type="button" class="user-menu-logout" (click)="userMenu.hide(); logout()">
+          <span class="material-symbols-outlined">logout</span>
+          Cerrar sesión
+        </button>
+      </div>
+    </p-popover>
+  </ng-template>
+</p-toolbar>
+
+<!-- Main -->
+<main class="dashboard-main">
+  <header class="dashboard-heading">
+    <h1>Panel principal</h1>
+    <p>Bienvenido, {{ user()?.name || 'usuario' }}. Centro de Gestión de Activos Digitales.</p>
+  </header>
+
+  <div class="cards-grid">
+
+    @for (card of cards; track card.route) {
+      <p-card class="dashboard-card">
+        <ng-template #content>
+          <div class="card-inner">
+            <div class="card-icon">
+              <span class="material-symbols-outlined">{{ card.icon }}</span>
+            </div>
+            <h3 class="card-title">{{ card.title }}</h3>
+            <p class="card-description">{{ card.description }}</p>
+            <p-button
+              class="card-btn"
+              label="Acceder"
+              icon="pi pi-arrow-right"
+              iconPos="right"
+              (onClick)="navigate(card.route)"
+            />
+          </div>
+        </ng-template>
+      </p-card>
+    }
+
+    <!-- Metric Card -->
+    <p-card class="metric-card">
+      <ng-template #content>
+        <div class="metric-inner">
+          <span class="metric-label">Resumen de Activos</span>
+          <div class="metric-number">0</div>
+          <p class="metric-text">Equipos gestionados actualmente</p>
+        </div>
+        <div class="metric-glow"></div>
+      </ng-template>
+    </p-card>
+
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="dashboard-footer">
+  <div>
+    <p class="footer-brand">AssetsPrecision</p>
+    <p class="footer-copy">© 2026 Gobierno de la Ciudad de México.</p>
+  </div>
+</footer>

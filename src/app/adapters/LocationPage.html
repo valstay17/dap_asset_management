@@ -1,0 +1,88 @@
+<div class="locations-page">
+  <header class="locations-header">
+    <div>
+      <h1>Ubicaciones</h1>
+      <p>Direcciones y edificios donde se resguardan los bienes informáticos.</p>
+    </div>
+    <p-button label="Nueva Ubicación" icon="pi pi-plus" (onClick)="openCreateDialog()" />
+  </header>
+
+  <div class="table-card">
+    <p-table [value]="locations()" [loading]="loading()" styleClass="locations-table">
+      <ng-template #header>
+        <tr>
+          <th>Edificio / Lugar</th>
+          <th>Dirección</th>
+          <th>Planta</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-location>
+        <tr>
+          <td class="building-cell">{{ location.building }}</td>
+          <td>{{ location.address }}</td>
+          <td>
+            @if (location.floor) {
+              <span class="floor-badge">{{ floorLabel(location.floor) }}</span>
+            } @else {
+              <span class="floor-badge floor-badge--none">—</span>
+            }
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="3" class="empty-row">No hay ubicaciones registradas.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog
+  header="Nueva Ubicación"
+  [modal]="true"
+  [visible]="showCreateDialog()"
+  (visibleChange)="showCreateDialog.set($event)"
+  [style]="{ width: '36rem' }"
+>
+  <form class="create-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="field-group">
+      <label for="building">Edificio o nombre del lugar</label>
+      <input id="building" type="text" pInputText formControlName="building" placeholder="Ej. Edificio N" [class.invalid]="isInvalid('building')" />
+    </div>
+
+    <div class="field-group">
+      <label for="address">Dirección</label>
+      <input id="address" type="text" pInputText formControlName="address" placeholder="Ej. Av. Insurgentes Sur 1457, CDMX" [class.invalid]="isInvalid('address')" />
+    </div>
+
+    <div class="field-group field-group--inline">
+      <p-checkbox inputId="hasMultipleFloors" formControlName="hasMultipleFloors" [binary]="true" />
+      <label for="hasMultipleFloors" class="checkbox-label">¿Tiene más de una planta?</label>
+    </div>
+
+    @if (hasMultipleFloors()) {
+      <div class="field-group">
+        <label for="floor">¿En cuál planta está?</label>
+        <p-select
+          inputId="floor"
+          formControlName="floor"
+          [options]="floorOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar planta..."
+          appendTo="body"
+        />
+      </div>
+    }
+
+    @if (errorMessage()) {
+      <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
+    }
+
+    <div class="form-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="closeCreateDialog()" />
+      <p-button type="submit" [label]="submitting() ? 'Guardando...' : 'Guardar Ubicación'" [loading]="submitting()" />
+    </div>
+  </form>
+</p-dialog>

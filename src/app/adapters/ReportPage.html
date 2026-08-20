@@ -1,0 +1,61 @@
+<div class="report-page">
+  <header class="report-header">
+    <div>
+      <h1>Registro</h1>
+      <p>Genera el registro en PDF de los bienes asignados, filtrado por usuario.</p>
+    </div>
+  </header>
+
+  <div class="filter-card">
+    <h2 class="card-title">Filtrar registro</h2>
+
+    <div class="field-group">
+      <label for="user">Usuario</label>
+      <p-select
+        inputId="user"
+        [options]="userOptions()"
+        optionLabel="label"
+        optionValue="id"
+        placeholder="Seleccionar usuario..."
+        [showClear]="true"
+        [ngModel]="selectedUserId()"
+        (onChange)="onUserChange($event.value)"
+        (onClear)="onUserChange(null)"
+        styleClass="user-select"
+        appendTo="body"
+      />
+    </div>
+
+    @if (selectedUser(); as user) {
+      <div class="mini-summary">
+        <div class="mini-row">
+          <span class="material-symbols-outlined">domain</span>
+          {{ user.entity }}
+        </div>
+        <div class="mini-row">
+          <span class="material-symbols-outlined">pin_drop</span>
+          {{ user.location }}
+        </div>
+        <div class="mini-row">
+          <span class="material-symbols-outlined">devices</span>
+          {{ assignedAssets().length }} equipo(s) asignado(s)
+        </div>
+      </div>
+    }
+
+    <p-button
+      [label]="generating() ? 'Generando...' : 'Generar Registro'"
+      icon="pi pi-file-pdf"
+      styleClass="generate-btn"
+      [disabled]="!selectedUser() || generating()"
+      [loading]="generating()"
+      (onClick)="generarRegistro()"
+    />
+
+    @if (errorMessage()) {
+      <p-message severity="error" styleClass="w-full">
+        {{ errorMessage() }}
+      </p-message>
+    }
+  </div>
+</div>

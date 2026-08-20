@@ -1,0 +1,102 @@
+:host {
+  --primary:            #620b27;
+  --primary-strong:     #80243d;
+  --on-surface:         #1b1c1c;
+  --on-surface-variant: #554245;
+  --outline:            #dbc0c3;
+
+  display: block;
+  font-family: "Inter", "Public Sans", "Segoe UI", sans-serif;
+  color: var(--on-surface);
+}
+
+.capture-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.capture-header h1 {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.capture-header p {
+  margin: 0;
+  color: var(--on-surface-variant);
+}
+
+.capture-form {
+  background: #ffffff;
+  border: 1px solid var(--outline);
+  border-radius: 0.9rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  display: grid;
+  gap: 1.5rem;
+  max-width: 60rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1.25rem;
+}
+
+.field-group {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.field-group label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--on-surface-variant);
+}
+
+.field-group input {
+  border: 1px solid var(--outline);
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  font: inherit;
+  font-size: 0.92rem;
+  color: var(--on-surface);
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.field-group input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(98, 11, 39, 0.12);
+}
+
+.field-group input.invalid {
+  border-color: #e57f72;
+}
+
+:host ::ng-deep .field-group .p-select {
+  width: 100%;
+}
+
+:host ::ng-deep .field-group .p-select.invalid {
+  border-color: #e57f72;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+:host ::ng-deep .form-actions .p-button {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%);
+  border: none;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+}

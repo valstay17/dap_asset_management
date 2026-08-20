@@ -1,0 +1,41 @@
+<div class="assets-shell">
+  <aside class="assets-sidebar">
+    <button type="button" class="back-link" (click)="goToDashboard()">
+      <span class="material-symbols-outlined">arrow_back</span>
+      Panel principal
+    </button>
+
+    <h2 class="sidebar-title">Bienes Informáticos</h2>
+
+    <nav class="sidebar-nav">
+      <a routerLink="captura" routerLinkActive="active" class="sidebar-link">
+        <span class="material-symbols-outlined">add_box</span>
+        Captura
+      </a>
+      <a routerLink="consulta" routerLinkActive="active" class="sidebar-link">
+        <span class="material-symbols-outlined">search</span>
+        Consulta
+      </a>
+      <a routerLink="usuarios" routerLinkActive="active" class="sidebar-link">
+        <span class="material-symbols-outlined">people</span>
+        Usuarios
+      </a>
+      <a routerLink="entidades" routerLinkActive="active" class="sidebar-link">
+        <span class="material-symbols-outlined">domain</span>
+        Entidades
+      </a>
+      <a routerLink="ubicaciones" routerLinkActive="active" class="sidebar-link">
+        <span class="material-symbols-outlined">place</span>
+        Ubicaciones
+      </a>
+      <a routerLink="registro" routerLinkActive="active" class="sidebar-link">
+        <span class="material-symbols-outlined">picture_as_pdf</span>
+        Registro
+      </a>
+    </nav>
+  </aside>
+
+  <section class="assets-content">
+    <router-outlet />
+  </section>
+</div>
