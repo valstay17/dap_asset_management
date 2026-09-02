@@ -1,0 +1,176 @@
+:host {
+  --primary:            #620b27;
+  --primary-strong:     #80243d;
+  --on-surface:         #1b1c1c;
+  --on-surface-variant: #554245;
+  --surface-low:        #fff0f1;
+  --outline:            #dbc0c3;
+
+  display: block;
+  font-family: "Inter", "Public Sans", "Segoe UI", sans-serif;
+  color: var(--on-surface);
+}
+
+.managers-header {
+  margin-bottom: 1.5rem;
+}
+
+.managers-header h1 {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.managers-header p {
+  margin: 0;
+  color: var(--on-surface-variant);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: #ffffff;
+  border: 1px solid var(--outline);
+  border-radius: 0.75rem;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 7rem;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--on-surface-variant);
+}
+
+.stat-value {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.stat-card--action {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%);
+  padding: 0;
+  overflow: hidden;
+}
+
+.stat-card--action .stat-label {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+:host ::ng-deep .stat-card--action p-button {
+  display: block;
+  height: 100%;
+}
+
+:host ::ng-deep .stat-action-btn.p-button {
+  width: 100%;
+  height: 100%;
+  min-height: 7rem;
+  border-radius: 0;
+  justify-content: space-between;
+  padding: 1.1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+}
+
+:host ::ng-deep .stat-action-btn.p-button:hover {
+  background: rgba(255, 255, 255, 0.22) !important;
+}
+
+.table-card {
+  background: #ffffff;
+  border: 1px solid var(--outline);
+  border-radius: 0.9rem;
+  overflow: hidden;
+}
+
+.name-cell {
+  font-weight: 600;
+}
+
+.empty-row {
+  text-align: center;
+  padding: 2rem;
+  color: var(--on-surface-variant);
+}
+
+:host ::ng-deep .managers-table .p-datatable-thead > tr > th {
+  background: var(--surface-low);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--on-surface-variant);
+}
+
+/* --- Create area manager dialog ---------------------------------------- */
+.create-form {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.field-group {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.field-group label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--on-surface-variant);
+}
+
+.field-group input {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.98rem;
+}
+
+.field-group input.invalid {
+  border-color: #e57f72;
+}
+
+:host ::ng-deep .field-group .p-select {
+  width: 100%;
+  min-width: 0;
+  font-size: 0.98rem;
+}
+
+:host ::ng-deep .field-group .p-select .p-select-label {
+  padding: 0.75rem 0.9rem;
+}
+
+:host ::ng-deep .field-group .p-select.invalid {
+  border-color: #e57f72;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+:host ::ng-deep .form-actions .p-button:not(.p-button-outlined) {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%);
+  border: none;
+  font-weight: 600;
+}

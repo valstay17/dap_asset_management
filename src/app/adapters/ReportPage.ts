@@ -6,6 +6,7 @@ import { MessageModule } from 'primeng/message';
 import { ListAssetsUseCase } from '../application/use-cases/ListAssetsUseCase';
 import { ListUsersUseCase } from '../application/use-cases/ListUsersUseCase';
 import { ListLocationsUseCase } from '../application/use-cases/ListLocationsUseCase';
+import { ListAreaManagersUseCase } from '../application/use-cases/ListAreaManagersUseCase';
 import { GenerateUserReportPdfUseCase } from '../application/use-cases/GenerateUserReportPdfUseCase';
 import { AssetStore } from '../application/AssetStore';
 import { UserStore } from '../application/UserStore';
@@ -21,6 +22,7 @@ export class ReportPage implements OnInit {
   private readonly listAssetsUseCase = inject(ListAssetsUseCase);
   private readonly listUsersUseCase = inject(ListUsersUseCase);
   private readonly listLocationsUseCase = inject(ListLocationsUseCase);
+  private readonly listAreaManagersUseCase = inject(ListAreaManagersUseCase);
   private readonly generateUserReportPdfUseCase = inject(GenerateUserReportPdfUseCase);
   private readonly assetStore = inject(AssetStore);
   private readonly userStore = inject(UserStore);
@@ -58,6 +60,7 @@ export class ReportPage implements OnInit {
     });
     this.listUsersUseCase.execute().subscribe();
     this.listLocationsUseCase.execute().subscribe();
+    this.listAreaManagersUseCase.execute().subscribe();
   }
 
   onUserChange(userId: string | null): void {

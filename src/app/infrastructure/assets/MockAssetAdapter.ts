@@ -10,6 +10,7 @@ let seedAssets: Asset[] = [
     id: '1',
     name: 'DAP-001',
     user: 'Fernando Perez',
+    custodian: 'Ricardo Hernández',
     entity: 'Subducción de Operación y Mantenimiento - A1',
     serialNumber: 'LNV-0001',
     manufacturer: 'LENOVO',
@@ -26,11 +27,13 @@ let seedAssets: Asset[] = [
     networkAddress: '192.168.000.0',
     macAddress: '00:1A:2B:3C:4D:5E',
     macAddressNetwork: '00:1A:2B:3C:4D:5F',
+    updatedAt: '2026-08-12T00:00:00.000Z',
   },
   {
     id: '2',
     name: 'DAP-002',
     user: 'Ricardo Hernández',
+    custodian: 'Ricardo Hernández',
     entity: 'Recursos Humanos de la DAP',
     serialNumber: 'HP-0002',
     manufacturer: 'HP',
@@ -47,11 +50,13 @@ let seedAssets: Asset[] = [
     networkAddress: '192.168.000.12',
     macAddress: '00:1B:2C:3D:4E:5F',
     macAddressNetwork: '00:1B:2C:3D:4E:60',
+    updatedAt: '2026-08-20T00:00:00.000Z',
   },
   {
     id: '3',
     name: 'DAP-003',
     user: 'Adriana Martínez',
+    custodian: 'Adriana Martínez',
     entity: 'Área de tecnologías de la Información y Comunicaciones',
     serialNumber: 'DL-0003',
     manufacturer: 'DELL',
@@ -68,11 +73,13 @@ let seedAssets: Asset[] = [
     networkAddress: '192.168.000.13',
     macAddress: '00:1C:2D:3E:4F:60',
     macAddressNetwork: '00:1C:2D:3E:4F:61',
+    updatedAt: '2026-08-28T00:00:00.000Z',
   },
   {
     id: '4',
     name: 'DAP-004',
     user: 'Ricardo Hernández',
+    custodian: 'Adriana Martínez',
     entity: 'Subdirección de Operación y Mantenimiento',
     serialNumber: 'LNV-0004',
     manufacturer: 'LENOVO',
@@ -89,6 +96,7 @@ let seedAssets: Asset[] = [
     networkAddress: '192.168.000.14',
     macAddress: '00:1D:2E:3F:40:61',
     macAddressNetwork: '00:1D:2E:3F:40:62',
+    updatedAt: '2026-08-25T00:00:00.000Z',
   },
 ];
 
@@ -99,8 +107,14 @@ export class MockAssetAdapter implements AssetPort {
   }
 
   create(input: NewAsset): Observable<Asset> {
-    const asset: Asset = { ...input, id: `${seedAssets.length + 1}-${Date.now()}` };
+    const asset: Asset = { ...input, id: `${seedAssets.length + 1}-${Date.now()}`, updatedAt: new Date().toISOString() };
     seedAssets = [asset, ...seedAssets];
+    return of(asset).pipe(delay(LATENCY_MS));
+  }
+
+  update(id: string, changes: NewAsset): Observable<Asset> {
+    const asset: Asset = { ...changes, id, updatedAt: new Date().toISOString() };
+    seedAssets = seedAssets.map((existing) => (existing.id === id ? asset : existing));
     return of(asset).pipe(delay(LATENCY_MS));
   }
 }

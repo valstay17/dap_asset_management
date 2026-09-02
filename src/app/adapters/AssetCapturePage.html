@@ -32,6 +32,18 @@
       </div>
 
       <div class="field-group">
+        <label for="custodian">Resguardante</label>
+        <p-select
+          inputId="custodian"
+          formControlName="custodian"
+          [options]="areaManagerOptions()"
+          placeholder="Seleccionar resguardante..."
+          [class.invalid]="isInvalid('custodian')"
+          appendTo="body"
+        />
+      </div>
+
+      <div class="field-group">
         <label for="entity">Entidad</label>
         <p-select
           inputId="entity"
@@ -45,10 +57,11 @@
 
       <div class="field-group">
         <label for="manufacturer">Fabricante</label>
-        <p-select
-          inputId="manufacturer"
+        <input
+          id="manufacturer"
+          type="text"
           formControlName="manufacturer"
-          placeholder="Selecciona un fabricante"
+          placeholder="LENOVO"
           [class.invalid]="isInvalid('manufacturer')"
         />
       </div>
@@ -77,19 +90,21 @@
 
       <div class="field-group">
         <label for="type">Tipo</label>
-        <input
-          id="type"
-          type="text"
+        <p-select
+          inputId="type"
           formControlName="type"
-          placeholder="Desktop"
+          [options]="typeOptions()"
+          placeholder="Seleccionar tipo..."
           [class.invalid]="isInvalid('type')"
+          appendTo="body"
         />
       </div>
 
       <div class="field-group">
         <label for="model">Modelo</label>
-        <p-select
-          inputId="model"
+        <input
+          id="model"
+          type="text"
           formControlName="model"
           placeholder="HP ProBook 440"
           [class.invalid]="isInvalid('model')"

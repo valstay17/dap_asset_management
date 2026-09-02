@@ -14,6 +14,10 @@ import { ENTITY_PORT } from './domain/ports/EntityPort';
 import { MockEntityAdapter } from './infrastructure/entities/MockEntityAdapter';
 import { LOCATION_PORT } from './domain/ports/LocationPort';
 import { MockLocationAdapter } from './infrastructure/locations/MockLocationAdapter';
+import { ASSET_TYPE_PORT } from './domain/ports/AssetTypePort';
+import { MockAssetTypeAdapter } from './infrastructure/asset-types/MockAssetTypeAdapter';
+import { AREA_MANAGER_PORT } from './domain/ports/AreaManagerPort';
+import { MockAreaManagerAdapter } from './infrastructure/area-managers/MockAreaManagerAdapter';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,5 +29,7 @@ export const appConfig: ApplicationConfig = {
     { provide: USER_PORT, useClass: MockUserAdapter },
     { provide: ENTITY_PORT, useClass: MockEntityAdapter },
     { provide: LOCATION_PORT, useClass: MockLocationAdapter },
+    { provide: ASSET_TYPE_PORT, useClass: MockAssetTypeAdapter },
+    { provide: AREA_MANAGER_PORT, useClass: MockAreaManagerAdapter },
   ]
 };

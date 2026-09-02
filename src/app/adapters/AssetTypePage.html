@@ -1,0 +1,53 @@
+<div class="types-page">
+  <header class="types-header">
+    <div>
+      <h1>Tipos de Equipo</h1>
+      <p>Categorías de bienes informáticos disponibles al capturar un equipo.</p>
+    </div>
+    <p-button label="Nuevo Tipo" icon="pi pi-plus" (onClick)="openCreateDialog()" />
+  </header>
+
+  <div class="table-card">
+    <p-table [value]="assetTypes()" [loading]="loading()" styleClass="types-table">
+      <ng-template #header>
+        <tr>
+          <th>Tipo</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-assetType>
+        <tr>
+          <td class="name-cell">{{ assetType.name }}</td>
+        </tr>
+      </ng-template>
+      <ng-template #emptymessage>
+        <tr>
+          <td class="empty-row">No hay tipos registrados.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog
+  header="Nuevo Tipo"
+  [modal]="true"
+  [visible]="showCreateDialog()"
+  (visibleChange)="showCreateDialog.set($event)"
+  [style]="{ width: '28rem' }"
+>
+  <form class="create-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="field-group">
+      <label for="name">Nombre del tipo</label>
+      <input id="name" type="text" pInputText formControlName="name" placeholder="Ej. Teclado" [class.invalid]="isInvalid('name')" />
+    </div>
+
+    @if (errorMessage()) {
+      <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
+    }
+
+    <div class="form-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="closeCreateDialog()" />
+      <p-button type="submit" [label]="submitting() ? 'Guardando...' : 'Guardar Tipo'" [loading]="submitting()" />
+    </div>
+  </form>
+</p-dialog>

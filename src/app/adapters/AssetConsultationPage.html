@@ -71,32 +71,208 @@
           <tr>
             <th>Nombre</th>
             <th>Usuario</th>
+            <th>Resguardante</th>
             <th>Entidad</th>
             <th>Ubicación</th>
             <th>Tipo</th>
             <th>Modelo</th>
             <th>N.° de Serie</th>
             <th>N.° de Inventario</th>
+            <th>Acciones</th>
           </tr>
         </ng-template>
         <ng-template #body let-asset>
           <tr>
             <td class="name-cell">{{ asset.name }}</td>
-            <td>{{ asset.user }}</td>
+            <td>
+              @if (asset.user) {
+                {{ asset.user }}
+              } @else {
+                <span class="unassigned-badge">Sin asignar</span>
+              }
+            </td>
+            <td>
+              @if (asset.custodian) {
+                {{ asset.custodian }}
+              } @else {
+                <span class="unassigned-badge">Sin asignar</span>
+              }
+            </td>
             <td>{{ asset.entity }}</td>
             <td>{{ asset.location }}</td>
             <td>{{ asset.type }}</td>
             <td>{{ asset.model }}</td>
             <td>{{ asset.serialNumber }}</td>
             <td>{{ asset.inventoryNumber }}</td>
+            <td>
+              <p-button
+                icon="pi pi-pencil"
+                severity="secondary"
+                [text]="true"
+                [rounded]="true"
+                pTooltip="Editar equipo"
+                (onClick)="openEditDialog(asset)"
+              />
+            </td>
           </tr>
         </ng-template>
         <ng-template #emptymessage>
           <tr>
-            <td colspan="8" class="empty-row">No se encontraron equipos con estos criterios.</td>
+            <td colspan="10" class="empty-row">No se encontraron equipos con estos criterios.</td>
           </tr>
         </ng-template>
       </p-table>
     </div>
   </div>
 </div>
+
+<p-dialog
+  header="Editar Equipo"
+  [modal]="true"
+  [visible]="showEditDialog()"
+  (visibleChange)="showEditDialog.set($event)"
+  [style]="{ width: '54rem' }"
+>
+  <form class="edit-form" [formGroup]="editForm" (ngSubmit)="onEditSubmit()" novalidate>
+    <div class="form-grid">
+      <div class="field-group">
+        <label for="edit-name">Nombre</label>
+        <input id="edit-name" type="text" pInputText formControlName="name" [class.invalid]="isEditInvalid('name')" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-user">Usuario</label>
+        <p-select
+          inputId="edit-user"
+          formControlName="user"
+          [options]="userOptions()"
+          placeholder="Sin asignar"
+          [showClear]="true"
+          appendTo="body"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-custodian">Resguardante</label>
+        <p-select
+          inputId="edit-custodian"
+          formControlName="custodian"
+          [options]="userOptions()"
+          placeholder="Sin asignar"
+          [showClear]="true"
+          appendTo="body"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-entity">Entidad</label>
+        <p-select
+          inputId="edit-entity"
+          formControlName="entity"
+          [options]="entityOptions()"
+          placeholder="Seleccionar entidad..."
+          [class.invalid]="isEditInvalid('entity')"
+          appendTo="body"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-manufacturer">Fabricante</label>
+        <input id="edit-manufacturer" type="text" pInputText formControlName="manufacturer" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-serialNumber">Número de serie</label>
+        <input id="edit-serialNumber" type="text" pInputText formControlName="serialNumber" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-inventoryNumber">Número de inventario</label>
+        <input id="edit-inventoryNumber" type="text" pInputText formControlName="inventoryNumber" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-type">Tipo</label>
+        <p-select
+          inputId="edit-type"
+          formControlName="type"
+          [options]="typeOptions()"
+          placeholder="Seleccionar tipo..."
+          [class.invalid]="isEditInvalid('type')"
+          appendTo="body"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-model">Modelo</label>
+        <input id="edit-model" type="text" pInputText formControlName="model" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-operatingSystem">Sistema Operativo - Nombre</label>
+        <input id="edit-operatingSystem" type="text" pInputText formControlName="operatingSystem" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-location">Ubicación</label>
+        <p-select
+          inputId="edit-location"
+          formControlName="location"
+          [options]="locationOptions()"
+          placeholder="Seleccionar ubicación..."
+          [class.invalid]="isEditInvalid('location')"
+          appendTo="body"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-processor">Componentes - Procesador</label>
+        <input id="edit-processor" type="text" pInputText formControlName="processor" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-memoryRAM">Componentes - Memoria RAM</label>
+        <input id="edit-memoryRAM" type="text" pInputText formControlName="memoryRAM" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-hardDiskType">Componentes - Disco Duro Tipo</label>
+        <input id="edit-hardDiskType" type="text" pInputText formControlName="hardDiskType" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-hardDiskCapacity">Componentes - Disco Duro Capacidad</label>
+        <input id="edit-hardDiskCapacity" type="text" pInputText formControlName="hardDiskCapacity" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-processorNumber">Componentes - Núcleos del procesador</label>
+        <input id="edit-processorNumber" type="text" pInputText formControlName="processorNumber" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-networkAddress">Redes - Dirección IP</label>
+        <input id="edit-networkAddress" type="text" pInputText formControlName="networkAddress" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-macAddress">Componentes - Dirección MAC</label>
+        <input id="edit-macAddress" type="text" pInputText formControlName="macAddress" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-macAddressNetwork">Redes - Dirección MAC</label>
+        <input id="edit-macAddressNetwork" type="text" pInputText formControlName="macAddressNetwork" />
+      </div>
+    </div>
+
+    @if (editErrorMessage()) {
+      <p-message severity="error" [text]="editErrorMessage()!" styleClass="w-full" />
+    }
+
+    <div class="form-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="closeEditDialog()" />
+      <p-button type="submit" [label]="editSubmitting() ? 'Guardando...' : 'Guardar cambios'" [loading]="editSubmitting()" />
+    </div>
+  </form>
+</p-dialog>

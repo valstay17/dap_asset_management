@@ -50,6 +50,7 @@
 .field-group {
   display: grid;
   gap: 0.4rem;
+  min-width: 0;
 }
 
 .field-group label {
@@ -83,10 +84,17 @@
 
 :host ::ng-deep .field-group .p-select {
   width: 100%;
+  min-width: 0;
 }
 
 :host ::ng-deep .field-group .p-select.invalid {
   border-color: #e57f72;
+}
+
+:host ::ng-deep .field-group .p-select .p-select-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .form-actions {

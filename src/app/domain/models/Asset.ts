@@ -4,6 +4,7 @@ export interface Asset {
   id: string;
   name: string;
   user: string;
+  custodian: string;
   entity: string;
   manufacturer: string;
   serialNumber: string;
@@ -20,7 +21,8 @@ export interface Asset {
   networkAddress: string;
   macAddress: string;
   macAddressNetwork: string;
+  updatedAt: string;
 
 }
 
-export type NewAsset = Omit<Asset, 'id'>;
+export type NewAsset = Omit<Asset, 'id' | 'updatedAt'>;

@@ -8,13 +8,15 @@ import { CaptureAssetUseCase } from '../application/use-cases/CaptureAssetUseCas
 import { ListUsersUseCase } from '../application/use-cases/ListUsersUseCase';
 import { ListEntitiesUseCase } from '../application/use-cases/ListEntitiesUseCase';
 import { ListLocationsUseCase } from '../application/use-cases/ListLocationsUseCase';
+import { ListAssetTypesUseCase } from '../application/use-cases/ListAssetTypesUseCase';
+import { ListAreaManagersUseCase } from '../application/use-cases/ListAreaManagersUseCase';
 import { UserStore } from '../application/UserStore';
 import { EntityStore } from '../application/EntityStore';
 import { LocationStore } from '../application/LocationStore';
+import { AssetTypeStore } from '../application/AssetTypeStore';
+import { AreaManagerStore } from '../application/AreaManagerStore';
 import { NewAsset } from '../domain/models/Asset';
 import { formatLocationLabel } from '../domain/models/SiteLocation';
-
-const CATEGORY_OPTIONS = ['Laptop', 'Desktop', 'Monitor', 'Impresora', 'Servidor', 'Tablet', 'Otro'];
 
 const STATUS_OPTIONS = [
   { label: 'Activo', value: 'activo' },
@@ -34,12 +36,15 @@ export class AssetCapturePage implements OnInit {
   private readonly listUsersUseCase = inject(ListUsersUseCase);
   private readonly listEntitiesUseCase = inject(ListEntitiesUseCase);
   private readonly listLocationsUseCase = inject(ListLocationsUseCase);
+  private readonly listAssetTypesUseCase = inject(ListAssetTypesUseCase);
+  private readonly listAreaManagersUseCase = inject(ListAreaManagersUseCase);
   private readonly userStore = inject(UserStore);
   private readonly entityStore = inject(EntityStore);
   private readonly locationStore = inject(LocationStore);
+  private readonly assetTypeStore = inject(AssetTypeStore);
+  private readonly areaManagerStore = inject(AreaManagerStore);
   private readonly router = inject(Router);
 
-  readonly categoryOptions = CATEGORY_OPTIONS;
   readonly statusOptions = STATUS_OPTIONS;
 
   readonly userOptions = computed(() =>
@@ -52,6 +57,8 @@ export class AssetCapturePage implements OnInit {
       .map((entity) => entity.name),
   );
   readonly locationOptions = computed(() => this.locationStore.locations().map(formatLocationLabel));
+  readonly typeOptions = computed(() => this.assetTypeStore.assetTypes().map((assetType) => assetType.name));
+  readonly areaManagerOptions = computed(() => this.areaManagerStore.areaManagers().map((areaManager) => areaManager.name));
 
   readonly submitting = signal(false);
   readonly successMessage = signal<string | null>(null);
@@ -60,28 +67,31 @@ export class AssetCapturePage implements OnInit {
   readonly form = this.fb.nonNullable.group({
     name: ['', Validators.required],
     user: ['', Validators.required],
+    custodian: ['', Validators.required],
     entity: ['', Validators.required],
-    manufacturer: ['', Validators.required],
-    serialNumber: ['', Validators.required],
-    inventoryNumber: ['', Validators.required],
+    manufacturer: [''],
+    serialNumber: [''],
+    inventoryNumber: [''],
     type: ['', Validators.required],
-    model: ['', Validators.required],
-    operatingSystem: ['', Validators.required],
+    model: [''],
+    operatingSystem: [''],
     location: ['', Validators.required],
-    processor: ['', Validators.required],
-    memoryRAM: ['', Validators.required],
-    hardDiskType: ['', Validators.required],
-    hardDiskCapacity: ['', Validators.required],
-    processorNumber: ['', Validators.required],
-    networkAddress: ['', Validators.required],
-    macAddress: ['', Validators.required],
-    macAddressNetwork: ['', Validators.required],
+    processor: [''],
+    memoryRAM: [''],
+    hardDiskType: [''],
+    hardDiskCapacity: [''],
+    processorNumber: [''],
+    networkAddress: [''],
+    macAddress: [''],
+    macAddressNetwork: [''],
   });
 
   ngOnInit(): void {
     this.listUsersUseCase.execute().subscribe();
     this.listEntitiesUseCase.execute().subscribe();
     this.listLocationsUseCase.execute().subscribe();
+    this.listAssetTypesUseCase.execute().subscribe();
+    this.listAreaManagersUseCase.execute().subscribe();
   }
 
   isInvalid(controlName: keyof typeof this.form.controls): boolean {

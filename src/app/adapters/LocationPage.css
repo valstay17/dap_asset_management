@@ -91,6 +91,7 @@
 .field-group {
   display: grid;
   gap: 0.5rem;
+  min-width: 0;
 }
 
 .field-group--inline {
@@ -126,6 +127,7 @@
 
 :host ::ng-deep .field-group .p-select {
   width: 100%;
+  min-width: 0;
   font-size: 0.98rem;
 }
 

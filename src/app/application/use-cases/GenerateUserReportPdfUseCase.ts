@@ -4,6 +4,7 @@ import { Asset } from '../../domain/models/Asset';
 import { User } from '../../domain/models/User';
 import { formatBuildingLabel, formatLocationLabel } from '../../domain/models/SiteLocation';
 import { LocationStore } from '../LocationStore';
+import { AreaManagerStore } from '../AreaManagerStore';
 
 const TEMPLATE_URL = '/plantilla_pdf.pdf';
 const MAX_ROWS = 4;
@@ -29,6 +30,7 @@ const ROWS: RowSlots[] = [
 @Injectable({ providedIn: 'root' })
 export class GenerateUserReportPdfUseCase {
   private readonly locationStore = inject(LocationStore);
+  private readonly areaManagerStore = inject(AreaManagerStore);
 
   async execute(user: User, assets: Asset[]): Promise<Uint8Array> {
     const templateBytes = await fetch(TEMPLATE_URL).then((response) => response.arrayBuffer());
@@ -44,8 +46,9 @@ export class GenerateUserReportPdfUseCase {
 
     draw(assets[0]?.name ?? '', 628, 587.1, 118);
     draw(fecha, 568, 568.8, 60);
+    draw(this.lastModifiedLabel(assets), 640, 550.5, 60);
     draw(this.buildingLabel(user.location), 590, 533.8, 155);
-    draw(`${user.firstName} ${user.lastName}`, 114, 510.4, 190);
+    draw(this.resguardanteName(user.entity), 114, 510.4, 190);
 
     const ROW_VALUE_X = 136;
     const ROW_VALUE_MAX_WIDTH = 115;
@@ -60,6 +63,22 @@ export class GenerateUserReportPdfUseCase {
     });
 
     return pdfDoc.save();
+  }
+
+  private lastModifiedLabel(assets: Asset[]): string {
+    if (assets.length === 0) {
+      return '';
+    }
+    const lastModified = assets.reduce(
+      (latest, asset) => (asset.updatedAt > latest ? asset.updatedAt : latest),
+      assets[0].updatedAt,
+    );
+    return new Date(lastModified).toLocaleDateString('es-MX', { year: 'numeric', month: '2-digit', day: '2-digit' });
+  }
+
+  private resguardanteName(userEntity: string): string {
+    const areaManager = this.areaManagerStore.areaManagers().find((manager) => manager.entity === userEntity);
+    return areaManager?.name ?? '';
   }
 
   private buildingLabel(userLocation: string): string {

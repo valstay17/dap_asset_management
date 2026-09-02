@@ -1,0 +1,83 @@
+<div class="managers-page">
+  <header class="managers-header">
+    <div>
+      <h1>Jefes de Área</h1>
+      <p>Responsables por entidad autorizados para resguardar bienes informáticos.</p>
+    </div>
+  </header>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-label">Total Jefes de Área</span>
+      <span class="stat-value">{{ total() }}</span>
+    </div>
+    <div class="stat-card stat-card--action">
+      <p-button
+        label="Nuevo Jefe de Área"
+        icon="pi pi-arrow-right"
+        iconPos="right"
+        styleClass="stat-action-btn"
+        (onClick)="openCreateDialog()"
+      />
+    </div>
+  </div>
+
+  <div class="table-card">
+    <p-table [value]="areaManagers()" [loading]="loading()" styleClass="managers-table">
+      <ng-template #header>
+        <tr>
+          <th>Nombre</th>
+          <th>Entidad</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-areaManager>
+        <tr>
+          <td class="name-cell">{{ areaManager.name }}</td>
+          <td>{{ areaManager.entity }}</td>
+        </tr>
+      </ng-template>
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="2" class="empty-row">No hay jefes de área registrados.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog
+  header="Nuevo Jefe de Área"
+  [modal]="true"
+  [visible]="showCreateDialog()"
+  (visibleChange)="showCreateDialog.set($event)"
+  [style]="{ width: '28rem' }"
+>
+  <form class="create-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="field-group">
+      <label for="entity">Entidad</label>
+      <p-select
+        inputId="entity"
+        formControlName="entity"
+        [options]="entityOptions()"
+        placeholder="Seleccionar entidad..."
+        [class.invalid]="isInvalid('entity')"
+        scrollHeight="220px"
+        appendTo="body"
+      />
+    </div>
+
+    <div class="field-group">
+      <label for="name">Nombre del resguardante</label>
+      <input id="name" type="text" pInputText formControlName="name" placeholder="Ej. Juan Pérez" [class.invalid]="isInvalid('name')" />
+    </div>
+
+    @if (errorMessage()) {
+      <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
+    }
+
+    <div class="form-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="closeCreateDialog()" />
+      <p-button type="submit" [label]="submitting() ? 'Guardando...' : 'Guardar'" [loading]="submitting()" />
+    </div>
+  </form>
+</p-dialog>

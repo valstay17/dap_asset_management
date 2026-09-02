@@ -14,4 +14,8 @@ export class AssetStore {
   addAsset(asset: Asset): void {
     this.assetsState.update((assets) => [asset, ...assets]);
   }
+
+  updateAsset(asset: Asset): void {
+    this.assetsState.update((assets) => assets.map((existing) => (existing.id === asset.id ? asset : existing)));
+  }
 }
