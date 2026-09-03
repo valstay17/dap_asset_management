@@ -1,0 +1,11 @@
+services:
+  dap-asset-management:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dap-asset-management:latest
+    container_name: dap-asset-management
+    restart: unless-stopped
+    ports:
+      - "74.208.66.106:6000:6000"
+
