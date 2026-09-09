@@ -28,6 +28,8 @@
           placeholder="Seleccionar usuario..."
           [class.invalid]="isInvalid('user')"
           appendTo="body"
+          [filter]="true"
+          filterPlaceholder="Buscar usuario..."
         />
       </div>
 
@@ -40,6 +42,8 @@
           placeholder="Seleccionar resguardante..."
           [class.invalid]="isInvalid('custodian')"
           appendTo="body"
+          [filter]="true"
+          filterPlaceholder="Buscar resguardante..."
         />
       </div>
 
@@ -52,6 +56,8 @@
           placeholder="Seleccionar entidad..."
           [class.invalid]="isInvalid('entity')"
           appendTo="body"
+          [filter]="true"
+          filterPlaceholder="Buscar entidad..."
         />
       </div>
 
@@ -97,6 +103,8 @@
           placeholder="Seleccionar tipo..."
           [class.invalid]="isInvalid('type')"
           appendTo="body"
+          [filter]="true"
+          filterPlaceholder="Buscar tipo..."
         />
       </div>
 
@@ -130,6 +138,8 @@
           placeholder="Seleccionar ubicación..."
           [class.invalid]="isInvalid('location')"
           appendTo="body"
+          [filter]="true"
+          filterPlaceholder="Buscar ubicación..."
         />
       </div>
       <div class="field-group">

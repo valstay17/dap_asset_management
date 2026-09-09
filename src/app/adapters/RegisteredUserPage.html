@@ -139,6 +139,8 @@
         placeholder="Seleccionar ubicación..."
         [class.invalid]="isInvalid('location')"
         appendTo="body"
+        [filter]="true"
+        filterPlaceholder="Buscar ubicación..."
       />
     </div>
 
@@ -152,20 +154,9 @@
         [class.invalid]="isInvalid('entity')"
         scrollHeight="220px"
         appendTo="body"
+        [filter]="true"
+        filterPlaceholder="Buscar entidad..."
       />
-    </div>
-
-    <div class="field-group">
-      <label for="department">Área</label>
-    <!--
-      <p-select
-        inputId="department"
-        formControlName="department"
-        [options]="departmentOptions"
-        placeholder="Seleccionar área..."
-        [class.invalid]="isInvalid('department')"
-      />
-    -->
     </div>
 
     @if (errorMessage()) {

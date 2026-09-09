@@ -38,12 +38,12 @@
   padding: clamp(1.5rem, 3vw, 2.25rem);
   display: grid;
   gap: 1.5rem;
-  max-width: 60rem;
+  width: 100%;
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   gap: 1.25rem;
 }
 
