@@ -117,4 +117,9 @@ export class MockAssetAdapter implements AssetPort {
     seedAssets = seedAssets.map((existing) => (existing.id === id ? asset : existing));
     return of(asset).pipe(delay(LATENCY_MS));
   }
+
+  delete(id: string): Observable<void> {
+    seedAssets = seedAssets.filter((existing) => existing.id !== id);
+    return of(undefined).pipe(delay(LATENCY_MS));
+  }
 }

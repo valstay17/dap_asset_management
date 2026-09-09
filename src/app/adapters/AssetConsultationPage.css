@@ -12,7 +12,25 @@
 }
 
 .consultation-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 1.5rem;
+}
+
+:host ::ng-deep .export-excel-btn.p-button {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%);
+  border: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.1rem;
+}
+
+:host ::ng-deep .export-excel-btn.p-button:disabled {
+  background: var(--outline);
+  opacity: 0.7;
 }
 
 .consultation-header h1 {
@@ -144,6 +162,12 @@
 .unassigned-badge {
   color: var(--on-surface-variant);
   font-style: italic;
+}
+
+.actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 /* --- Edit asset dialog ---------------------------------------------- */

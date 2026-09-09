@@ -23,7 +23,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    providePrimeNG({ theme: { preset: Aura } }),
+    providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: false } } }),
     { provide: AUTH_PORT, useClass: MockAuthAdapter },
     { provide: ASSET_PORT, useClass: MockAssetAdapter },
     { provide: USER_PORT, useClass: MockUserAdapter },

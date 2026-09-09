@@ -1,11 +1,13 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ConfirmationService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageModule } from 'primeng/message';
 import { TooltipModule } from 'primeng/tooltip';
 import { Select } from 'primeng/select';
@@ -15,6 +17,8 @@ import { ListEntitiesUseCase } from '../application/use-cases/ListEntitiesUseCas
 import { ListLocationsUseCase } from '../application/use-cases/ListLocationsUseCase';
 import { ListAssetTypesUseCase } from '../application/use-cases/ListAssetTypesUseCase';
 import { UpdateAssetUseCase } from '../application/use-cases/UpdateAssetUseCase';
+import { DeleteAssetUseCase } from '../application/use-cases/DeleteAssetUseCase';
+import { GenerateAssetConsultationExcelUseCase } from '../application/use-cases/GenerateAssetConsultationExcelUseCase';
 import { AssetStore } from '../application/AssetStore';
 import { UserStore } from '../application/UserStore';
 import { EntityStore } from '../application/EntityStore';
@@ -34,21 +38,26 @@ import { formatLocationLabel } from '../domain/models/SiteLocation';
     InputIconModule,
     ButtonModule,
     DialogModule,
+    ConfirmDialogModule,
     MessageModule,
     TooltipModule,
     Select,
   ],
+  providers: [ConfirmationService],
   templateUrl: './AssetConsultationPage.html',
   styleUrl: './AssetConsultationPage.css',
 })
 export class AssetConsultationPage implements OnInit {
   private readonly fb = inject(FormBuilder);
+  private readonly confirmationService = inject(ConfirmationService);
   private readonly listAssetsUseCase = inject(ListAssetsUseCase);
   private readonly listUsersUseCase = inject(ListUsersUseCase);
   private readonly listEntitiesUseCase = inject(ListEntitiesUseCase);
   private readonly listLocationsUseCase = inject(ListLocationsUseCase);
   private readonly listAssetTypesUseCase = inject(ListAssetTypesUseCase);
   private readonly updateAssetUseCase = inject(UpdateAssetUseCase);
+  private readonly deleteAssetUseCase = inject(DeleteAssetUseCase);
+  private readonly generateAssetConsultationExcelUseCase = inject(GenerateAssetConsultationExcelUseCase);
   private readonly assetStore = inject(AssetStore);
   private readonly userStore = inject(UserStore);
   private readonly entityStore = inject(EntityStore);
@@ -56,6 +65,7 @@ export class AssetConsultationPage implements OnInit {
   private readonly assetTypeStore = inject(AssetTypeStore);
 
   readonly loading = signal(true);
+  readonly generatingExcel = signal(false);
 
   readonly nameFilter = signal('');
   readonly userFilter = signal<string | null>(null);
@@ -100,6 +110,8 @@ export class AssetConsultationPage implements OnInit {
   readonly editErrorMessage = signal<string | null>(null);
   private editingAssetId: string | null = null;
 
+  readonly deletingIds = signal<Set<string>>(new Set());
+
   readonly editForm = this.fb.nonNullable.group({
     name: ['', Validators.required],
     user: [''],
@@ -135,6 +147,28 @@ export class AssetConsultationPage implements OnInit {
 
   onNameFilterInput(value: string): void {
     this.nameFilter.set(value);
+  }
+
+  async exportarExcel(): Promise<void> {
+    if (this.generatingExcel()) {
+      return;
+    }
+
+    this.generatingExcel.set(true);
+    try {
+      const excelBytes = this.generateAssetConsultationExcelUseCase.execute(this.filteredAssets());
+      const blob = new Blob([excelBytes as unknown as BlobPart], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'consulta-de-equipos.xlsx';
+      link.click();
+      URL.revokeObjectURL(url);
+    } finally {
+      this.generatingExcel.set(false);
+    }
   }
 
   clearFilters(): void {
@@ -199,6 +233,40 @@ export class AssetConsultationPage implements OnInit {
       error: () => {
         this.editSubmitting.set(false);
         this.editErrorMessage.set('No se pudo actualizar el equipo. Intenta nuevamente.');
+      },
+    });
+  }
+
+  confirmDelete(asset: Asset): void {
+    this.confirmationService.confirm({
+      header: 'Eliminar equipo',
+      message: `¿Deseas eliminar el equipo "${asset.name}"? Esta acción no se puede deshacer.`,
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Eliminar',
+      rejectLabel: 'Cancelar',
+      acceptButtonProps: { severity: 'danger' },
+      rejectButtonProps: { severity: 'secondary', outlined: true },
+      accept: () => this.deleteAsset(asset),
+    });
+  }
+
+  private deleteAsset(asset: Asset): void {
+    this.deletingIds.update((ids) => new Set(ids).add(asset.id));
+
+    this.deleteAssetUseCase.execute(asset.id).subscribe({
+      next: () => {
+        this.deletingIds.update((ids) => {
+          const next = new Set(ids);
+          next.delete(asset.id);
+          return next;
+        });
+      },
+      error: () => {
+        this.deletingIds.update((ids) => {
+          const next = new Set(ids);
+          next.delete(asset.id);
+          return next;
+        });
       },
     });
   }

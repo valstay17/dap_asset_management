@@ -1,9 +1,19 @@
+<p-confirmDialog [style]="{ width: '26rem' }" />
+
 <div class="consultation-page">
   <header class="consultation-header">
     <div>
       <h1>Consulta de Equipos</h1>
       <p>Búsqueda avanzada del parque informático por usuario, entidad o ubicación.</p>
     </div>
+    <p-button
+      [label]="generatingExcel() ? 'Generando...' : 'Exportar Excel'"
+      icon="pi pi-file-excel"
+      styleClass="export-excel-btn"
+      [disabled]="generatingExcel() || resultCount() === 0"
+      [loading]="generatingExcel()"
+      (onClick)="exportarExcel()"
+    />
   </header>
 
   <div class="stats-grid">
@@ -105,14 +115,25 @@
             <td>{{ asset.serialNumber }}</td>
             <td>{{ asset.inventoryNumber }}</td>
             <td>
-              <p-button
-                icon="pi pi-pencil"
-                severity="secondary"
-                [text]="true"
-                [rounded]="true"
-                pTooltip="Editar equipo"
-                (onClick)="openEditDialog(asset)"
-              />
+              <div class="actions-cell">
+                <p-button
+                  icon="pi pi-pencil"
+                  severity="secondary"
+                  [text]="true"
+                  [rounded]="true"
+                  pTooltip="Editar equipo"
+                  (onClick)="openEditDialog(asset)"
+                />
+                <p-button
+                  icon="pi pi-trash"
+                  severity="danger"
+                  [text]="true"
+                  [rounded]="true"
+                  [loading]="deletingIds().has(asset.id)"
+                  pTooltip="Eliminar equipo"
+                  (onClick)="confirmDelete(asset)"
+                />
+              </div>
             </td>
           </tr>
         </ng-template>
@@ -149,6 +170,8 @@
           placeholder="Sin asignar"
           [showClear]="true"
           appendTo="body"
+          [filter]="true"
+          filterPlaceholder="Buscar usuario..."
         />
       </div>
 
@@ -161,6 +184,8 @@
           placeholder="Sin asignar"
           [showClear]="true"
           appendTo="body"
+          [filter]="true"
+          filterPlaceholder="Buscar resguardante..."
         />
       </div>
 
@@ -173,6 +198,8 @@
           placeholder="Seleccionar entidad..."
           [class.invalid]="isEditInvalid('entity')"
           appendTo="body"
+          [filter]="true"
+          filterPlaceholder="Buscar entidad..."
         />
       </div>
 
@@ -200,6 +227,8 @@
           placeholder="Seleccionar tipo..."
           [class.invalid]="isEditInvalid('type')"
           appendTo="body"
+          [filter]="true"
+          filterPlaceholder="Buscar tipo..."
         />
       </div>
 
@@ -222,6 +251,8 @@
           placeholder="Seleccionar ubicación..."
           [class.invalid]="isEditInvalid('location')"
           appendTo="body"
+          [filter]="true"
+          filterPlaceholder="Buscar ubicación..."
         />
       </div>
 

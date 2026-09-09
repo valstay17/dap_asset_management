@@ -18,4 +18,8 @@ export class AssetStore {
   updateAsset(asset: Asset): void {
     this.assetsState.update((assets) => assets.map((existing) => (existing.id === asset.id ? asset : existing)));
   }
+
+  removeAsset(id: string): void {
+    this.assetsState.update((assets) => assets.filter((existing) => existing.id !== id));
+  }
 }
