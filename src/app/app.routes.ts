@@ -21,7 +21,6 @@ export const routes: Routes = [
       { path: 'entidades', loadComponent: () => import('./adapters/EntityPage').then((m) => m.EntityPage) },
       { path: 'ubicaciones', loadComponent: () => import('./adapters/LocationPage').then((m) => m.LocationPage) },
       { path: 'tipos', loadComponent: () => import('./adapters/AssetTypePage').then((m) => m.AssetTypePage) },
-      { path: 'ips', loadComponent: () => import('./adapters/IpListPage').then((m) => m.IpListPage) },
       { path: 'registro', loadComponent: () => import('./adapters/ReportPage').then((m) => m.ReportPage) },
     ],
   },
