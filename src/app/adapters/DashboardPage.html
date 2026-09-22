@@ -16,7 +16,7 @@
       <div class="user-menu">
         <div class="user-menu-header">
           <p class="user-menu-name">{{ user()?.name }}</p>
-          <p class="user-menu-email">{{ user()?.email }}</p>
+          <p class="user-menu-email">{{ user()?.mail }}</p>
         </div>
         <button type="button" class="user-menu-logout" (click)="userMenu.hide(); logout()">
           <span class="material-symbols-outlined">logout</span>

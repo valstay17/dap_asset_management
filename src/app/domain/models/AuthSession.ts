@@ -1,8 +1,8 @@
 export interface AuthSession {
-    accessToken: string;
+    token: string;
     user: {
-        id: string;
+        idUser: string;
         name: string;
-        email: string;
+        mail: string;
     }
 }

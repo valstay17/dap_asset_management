@@ -16,19 +16,13 @@ const MOCK_LATENCY_MS = 600;
 @Injectable({ providedIn: 'root' })
 export class MockAuthAdapter implements AuthPort {
   login(credentials: Credentials): Observable<AuthSession> {
-    const isValid =
-      credentials.username === MOCK_ACCOUNT.username && credentials.password === MOCK_ACCOUNT.password;
-
-    if (!isValid) {
-      return throwError(() => new Error('Usuario o contraseña incorrectos.')).pipe(delay(MOCK_LATENCY_MS));
-    }
-
+    
     const session: AuthSession = {
-      accessToken: `mock-token-${MOCK_ACCOUNT.id}`,
+      token: `mock-token-${MOCK_ACCOUNT.id}`,
       user: {
-        id: MOCK_ACCOUNT.id,
+        idUser: MOCK_ACCOUNT.id,
         name: MOCK_ACCOUNT.name,
-        email: MOCK_ACCOUNT.email,
+        mail: MOCK_ACCOUNT.email,
       },
     };
 
