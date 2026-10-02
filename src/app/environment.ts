@@ -1,4 +1,5 @@
-const baseUrl = 'http://localhost:8086/dap/asset';
+// const baseUrl = 'http://localhost:8086/dap/asset';
+const baseUrl = 'https://it.sobse.com.mx/dap/asset';
 export const environment = {
   production: true,
   baseUrl: baseUrl,
@@ -7,4 +8,25 @@ export const environment = {
   ubicacionFindById: baseUrl + '/v1/ubicacionController/findById',
   ubicacionSave: baseUrl + '/v1/ubicacionController/save',
   ubicacionUpdate: baseUrl + '/v1/ubicacionController/update',
+  entidadFindAll: baseUrl + '/v1/entidadController/findAll',
+  entidadFindById: baseUrl + '/v1/entidadController/findById',
+  entidadSave: baseUrl + '/v1/entidadController/save',
+  entidadUpdate: baseUrl + '/v1/entidadController/update',
+  responsableFindAll: baseUrl + '/v1/responsableController/findAll',
+  responsableFindById: baseUrl + '/v1/responsableController/findById',
+  responsableSave: baseUrl + '/v1/responsableController/save',
+  responsableUpdate: baseUrl + '/v1/responsableController/update',
+  personalFindAll: baseUrl + '/v1/personalController/findAll',
+  personalFindById: baseUrl + '/v1/personalController/findById',
+  personalSave: baseUrl + '/v1/personalController/save',
+  personalUpdate: baseUrl + '/v1/personalController/update',
+  tipoEquipoFindAll: baseUrl + '/v1/tipoEquipoController/findAll',
+  tipoEquipoFindById: baseUrl + '/v1/tipoEquipoController/findById',
+  tipoEquipoSave: baseUrl + '/v1/tipoEquipoController/save',
+  tipoEquipoUpdate: baseUrl + '/v1/tipoEquipoController/update',
+  resguardoFindAll: baseUrl + '/v1/resguardoController/findAll',
+  resguardoFindById: baseUrl + '/v1/resguardoController/findById',
+  resguardoSave: baseUrl + '/v1/resguardoController/save',
+  resguardoUpdate: baseUrl + '/v1/resguardoController/update',
+  resguardoDeleteById: baseUrl + '/v1/resguardoController/deleteById',
 };

@@ -16,6 +16,7 @@ import { ListUsersUseCase } from '../application/use-cases/ListUsersUseCase';
 import { ListEntitiesUseCase } from '../application/use-cases/ListEntitiesUseCase';
 import { ListLocationsUseCase } from '../application/use-cases/ListLocationsUseCase';
 import { ListAssetTypesUseCase } from '../application/use-cases/ListAssetTypesUseCase';
+import { ListAreaManagersUseCase } from '../application/use-cases/ListAreaManagersUseCase';
 import { UpdateAssetUseCase } from '../application/use-cases/UpdateAssetUseCase';
 import { DeleteAssetUseCase } from '../application/use-cases/DeleteAssetUseCase';
 import { GenerateAssetConsultationExcelUseCase } from '../application/use-cases/GenerateAssetConsultationExcelUseCase';
@@ -24,6 +25,7 @@ import { UserStore } from '../application/UserStore';
 import { EntityStore } from '../application/EntityStore';
 import { LocationStore } from '../application/LocationStore';
 import { AssetTypeStore } from '../application/AssetTypeStore';
+import { AreaManagerStore } from '../application/AreaManagerStore';
 import { Asset, NewAsset } from '../domain/models/Asset';
 import { formatLocationLabel } from '../domain/models/SiteLocation';
 
@@ -55,6 +57,7 @@ export class AssetConsultationPage implements OnInit {
   private readonly listEntitiesUseCase = inject(ListEntitiesUseCase);
   private readonly listLocationsUseCase = inject(ListLocationsUseCase);
   private readonly listAssetTypesUseCase = inject(ListAssetTypesUseCase);
+  private readonly listAreaManagersUseCase = inject(ListAreaManagersUseCase);
   private readonly updateAssetUseCase = inject(UpdateAssetUseCase);
   private readonly deleteAssetUseCase = inject(DeleteAssetUseCase);
   private readonly generateAssetConsultationExcelUseCase = inject(GenerateAssetConsultationExcelUseCase);
@@ -63,6 +66,7 @@ export class AssetConsultationPage implements OnInit {
   private readonly entityStore = inject(EntityStore);
   private readonly locationStore = inject(LocationStore);
   private readonly assetTypeStore = inject(AssetTypeStore);
+  private readonly areaManagerStore = inject(AreaManagerStore);
 
   readonly loading = signal(true);
   readonly generatingExcel = signal(false);
@@ -81,6 +85,37 @@ export class AssetConsultationPage implements OnInit {
   );
   readonly locationOptions = computed(() => this.locationStore.locations().map(formatLocationLabel));
   readonly typeOptions = computed(() => this.assetTypeStore.assetTypes().map((assetType) => assetType.name));
+
+  readonly userFormOptions = computed(() =>
+    this.userStore
+      .users()
+      .filter((user) => user.status === 'activo')
+      .map((user) => ({ id: user.id, label: `${user.firstName} ${user.lastName}` })),
+  );
+  readonly custodianFormOptions = computed(() =>
+    this.areaManagerStore
+      .areaManagers()
+      .filter((areaManager) => areaManager.active)
+      .map((areaManager) => ({ id: areaManager.id, label: areaManager.name })),
+  );
+  readonly entityFormOptions = computed(() =>
+    this.entityStore
+      .entities()
+      .filter((entity) => entity.level !== 0 && entity.active)
+      .map((entity) => ({ id: entity.id, label: entity.name })),
+  );
+  readonly locationFormOptions = computed(() =>
+    this.locationStore
+      .locations()
+      .filter((location) => location.active)
+      .map((location) => ({ id: location.id, label: formatLocationLabel(location) })),
+  );
+  readonly typeFormOptions = computed(() =>
+    this.assetTypeStore
+      .assetTypes()
+      .filter((assetType) => assetType.active)
+      .map((assetType) => ({ id: assetType.id, label: assetType.name })),
+  );
 
   readonly total = computed(() => this.assetStore.assets().length);
 
@@ -114,16 +149,16 @@ export class AssetConsultationPage implements OnInit {
 
   readonly editForm = this.fb.nonNullable.group({
     name: ['', Validators.required],
-    user: [''],
-    custodian: [''],
-    entity: ['', Validators.required],
+    userId: [''],
+    custodianId: [''],
+    entityId: ['', Validators.required],
     manufacturer: [''],
     serialNumber: [''],
     inventoryNumber: [''],
-    type: ['', Validators.required],
+    typeId: ['', Validators.required],
     model: [''],
     operatingSystem: [''],
-    location: ['', Validators.required],
+    locationId: ['', Validators.required],
     processor: [''],
     memoryRAM: [''],
     hardDiskType: [''],
@@ -143,6 +178,7 @@ export class AssetConsultationPage implements OnInit {
     this.listEntitiesUseCase.execute().subscribe();
     this.listLocationsUseCase.execute().subscribe();
     this.listAssetTypesUseCase.execute().subscribe();
+    this.listAreaManagersUseCase.execute().subscribe();
   }
 
   onNameFilterInput(value: string): void {
@@ -188,16 +224,16 @@ export class AssetConsultationPage implements OnInit {
     this.editErrorMessage.set(null);
     this.editForm.reset({
       name: asset.name,
-      user: asset.user,
-      custodian: asset.custodian,
-      entity: asset.entity,
+      userId: asset.userId,
+      custodianId: asset.custodianId,
+      entityId: asset.entityId,
       manufacturer: asset.manufacturer,
       serialNumber: asset.serialNumber,
       inventoryNumber: asset.inventoryNumber,
-      type: asset.type,
+      typeId: asset.typeId,
       model: asset.model,
       operatingSystem: asset.operatingSystem,
-      location: asset.location,
+      locationId: asset.locationId,
       processor: asset.processor,
       memoryRAM: asset.memoryRAM,
       hardDiskType: asset.hardDiskType,

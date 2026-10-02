@@ -109,6 +109,10 @@
   color: var(--on-surface-variant);
 }
 
+.text-center {
+  text-align: center;
+}
+
 :host ::ng-deep .managers-table .p-datatable-thead > tr > th {
   background: var(--surface-low);
   font-size: 0.68rem;

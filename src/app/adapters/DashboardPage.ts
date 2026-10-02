@@ -6,6 +6,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { AvatarModule } from 'primeng/avatar';
 import { Popover } from 'primeng/popover';
 import { SessionStore } from '../application/SessionStore';
+import { TokenService } from '../tokenService';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -16,6 +17,7 @@ import { SessionStore } from '../application/SessionStore';
 export class DashboardPage {
   private readonly router = inject(Router);
   private readonly sessionStore = inject(SessionStore);
+  private tokenService = inject(TokenService);
 
   isScrolled = false;
 
@@ -52,6 +54,7 @@ export class DashboardPage {
 
   logout(): void {
     this.sessionStore.clearSession();
+    this.tokenService.logOut();
     this.router.navigateByUrl('/login');
   }
 }

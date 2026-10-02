@@ -31,21 +31,8 @@ export class TokenService {
     return new HttpHeaders().set('Authorization', 'Bearer ' + this.getToken());
   }
 
-//   public getUser(): User {
-//     const userData = JSON.parse(sessionStorage.getItem('user') || 'null');
-//     if (!userData || !userData.user) {
-//       this.logOut();
-//       throw new Error('User not authenticated');
-//     }
-//     return userData.user;
-//   }
-
-//   public setToken(login: Login): void {
-//     sessionStorage.setItem('user', JSON.stringify(login));
-//   }
-
-//   public logOut(): void {
-//     sessionStorage.removeItem('user');
-//     this.router.navigate(['/login']);
-//   }
+  public logOut(): void {
+    sessionStorage.removeItem('data');
+    this.router.navigate(['/login']);
+  }
 }

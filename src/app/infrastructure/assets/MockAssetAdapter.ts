@@ -9,13 +9,18 @@ let seedAssets: Asset[] = [
   {
     id: '1',
     name: 'DAP-001',
+    userId: '1',
     user: 'Fernando Perez',
+    custodianId: '1',
     custodian: 'Ricardo Hernández',
+    entityId: '3',
     entity: 'Subducción de Operación y Mantenimiento - A1',
     serialNumber: 'LNV-0001',
     manufacturer: 'LENOVO',
     inventoryNumber: 'INV0101',
+    locationId: '1',
     location: 'Edificio N - Planta baja',
+    typeId: '1',
     type: 'Desktop',
     model: 'ThinkCentre M720q',
     operatingSystem: 'Windows 10 Pro',
@@ -32,13 +37,18 @@ let seedAssets: Asset[] = [
   {
     id: '2',
     name: 'DAP-002',
+    userId: '2',
     user: 'Ricardo Hernández',
+    custodianId: '1',
     custodian: 'Ricardo Hernández',
+    entityId: '2',
     entity: 'Recursos Humanos de la DAP',
     serialNumber: 'HP-0002',
     manufacturer: 'HP',
     inventoryNumber: 'INV0102',
+    locationId: '1',
     location: 'Edificio N — Canal de Apatlaco, Iztacalco, CDMX (Planta alta)',
+    typeId: '2',
     type: 'Laptop',
     model: 'ProBook 440 G8',
     operatingSystem: 'Windows 11 Pro',
@@ -55,13 +65,18 @@ let seedAssets: Asset[] = [
   {
     id: '3',
     name: 'DAP-003',
+    userId: '3',
     user: 'Adriana Martínez',
+    custodianId: '2',
     custodian: 'Adriana Martínez',
+    entityId: '1',
     entity: 'Área de tecnologías de la Información y Comunicaciones',
     serialNumber: 'DL-0003',
     manufacturer: 'DELL',
     inventoryNumber: 'INV0103',
+    locationId: '2',
     location: 'Edificio M — Canal de Apatlaco, Iztacalco, CDMX (Planta baja)',
+    typeId: '1',
     type: 'Desktop',
     model: 'OptiPlex 3080',
     operatingSystem: 'Windows 10 Pro',
@@ -78,13 +93,18 @@ let seedAssets: Asset[] = [
   {
     id: '4',
     name: 'DAP-004',
+    userId: '2',
     user: 'Ricardo Hernández',
+    custodianId: '2',
     custodian: 'Adriana Martínez',
+    entityId: '3',
     entity: 'Subdirección de Operación y Mantenimiento',
     serialNumber: 'LNV-0004',
     manufacturer: 'LENOVO',
     inventoryNumber: 'INV0104',
+    locationId: '3',
     location: 'Edificio S — Canal de Apatlaco, CDMX',
+    typeId: '2',
     type: 'Laptop',
     model: 'ThinkPad E14',
     operatingSystem: 'Windows 11 Pro',
@@ -107,13 +127,31 @@ export class MockAssetAdapter implements AssetPort {
   }
 
   create(input: NewAsset): Observable<Asset> {
-    const asset: Asset = { ...input, id: `${seedAssets.length + 1}-${Date.now()}`, updatedAt: new Date().toISOString() };
+    const asset: Asset = {
+      ...input,
+      id: `${seedAssets.length + 1}-${Date.now()}`,
+      user: input.userId,
+      custodian: input.custodianId,
+      entity: input.entityId,
+      type: input.typeId,
+      location: input.locationId,
+      updatedAt: new Date().toISOString(),
+    };
     seedAssets = [asset, ...seedAssets];
     return of(asset).pipe(delay(LATENCY_MS));
   }
 
   update(id: string, changes: NewAsset): Observable<Asset> {
-    const asset: Asset = { ...changes, id, updatedAt: new Date().toISOString() };
+    const asset: Asset = {
+      ...changes,
+      id,
+      user: changes.userId,
+      custodian: changes.custodianId,
+      entity: changes.entityId,
+      type: changes.typeId,
+      location: changes.locationId,
+      updatedAt: new Date().toISOString(),
+    };
     seedAssets = seedAssets.map((existing) => (existing.id === id ? asset : existing));
     return of(asset).pipe(delay(LATENCY_MS));
   }

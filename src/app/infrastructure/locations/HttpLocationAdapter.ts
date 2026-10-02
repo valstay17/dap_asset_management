@@ -11,7 +11,7 @@ interface UbicacionDto {
   lugar: string;
   direccion: string;
   adicionales: string;
-  planta: string;
+  planta: string | null;
   active: boolean;
 }
 
@@ -26,11 +26,13 @@ const PLANTA_TO_FLOOR: Record<string, Floor | undefined> = {
 };
 
 function toSiteLocation(dto: UbicacionDto): SiteLocation {
+  const planta = dto.planta;
   return {
     id: String(dto.idUbicacion),
     building: dto.lugar,
     address: dto.direccion,
-    floor: PLANTA_TO_FLOOR[dto.planta],
+    floor: planta ? PLANTA_TO_FLOOR[planta] : undefined,
+    active: dto.active,
   };
 }
 
@@ -39,7 +41,7 @@ function toUbicacionPayload(input: NewSiteLocation): Omit<UbicacionDto, 'idUbica
     lugar: input.building,
     direccion: input.address,
     adicionales: '',
-    planta: input.floor ? FLOOR_TO_PLANTA[input.floor] : '',
+    planta: input.floor ? FLOOR_TO_PLANTA[input.floor] : null,
     active: true,
   };
 }
@@ -58,8 +60,9 @@ export class HttpLocationAdapter implements LocationPort {
   }
 
   create(input: NewSiteLocation): Observable<SiteLocation> {
+    const headers = this.tokenService.loggedHeader();
     return this.http
-      .post<UbicacionDto>(environment.ubicacionSave, toUbicacionPayload(input))
+      .post<UbicacionDto>(environment.ubicacionSave, toUbicacionPayload(input), {headers: headers})
       .pipe(map(toSiteLocation));
   }
 }

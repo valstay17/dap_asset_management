@@ -61,9 +61,11 @@ export class EntityPage implements OnInit {
     return roots;
   });
 
-  // Cualquier entidad existente puede ser el padre de una nueva; el nivel se deriva de ella.
+  // Cualquier entidad activa existente puede ser el padre de una nueva; el nivel se deriva de ella.
   readonly parentOptions = computed(() =>
-    this.entities().map((entity) => ({
+    this.entities()
+      .filter((entity) => entity.active)
+      .map((entity) => ({
       id: entity.id,
       label: `${'—  '.repeat(entity.level)}${entity.name}`,
     })),
@@ -71,7 +73,7 @@ export class EntityPage implements OnInit {
 
   readonly form = this.fb.nonNullable.group({
     name: ['', Validators.required],
-    parentId: ['', Validators.required],
+    parentId: [''],
   });
 
   ngOnInit(): void {
@@ -111,8 +113,10 @@ export class EntityPage implements OnInit {
     }
 
     const { name, parentId } = this.form.getRawValue();
-    const parent = this.entities().find((entity) => entity.id === parentId);
-    if (!parent) {
+    const hasRoot = !!this.root();
+    const parent = parentId ? this.entities().find((entity) => entity.id === parentId) : undefined;
+
+    if (hasRoot && !parent) {
       this.errorMessage.set('Selecciona la entidad padre.');
       return;
     }
@@ -120,7 +124,9 @@ export class EntityPage implements OnInit {
     this.submitting.set(true);
     this.errorMessage.set(null);
 
-    const payload: NewEntity = { name, parentId, level: parent.level + 1 };
+    const payload: NewEntity = parent
+      ? { name, parentId: parent.id, level: parent.level + 1 }
+      : { name, parentId: null, level: 0 };
 
     this.createEntityUseCase.execute(payload).subscribe({
       next: () => {

@@ -165,8 +165,10 @@
         <label for="edit-user">Usuario</label>
         <p-select
           inputId="edit-user"
-          formControlName="user"
-          [options]="userOptions()"
+          formControlName="userId"
+          [options]="userFormOptions()"
+          optionLabel="label"
+          optionValue="id"
           placeholder="Sin asignar"
           [showClear]="true"
           appendTo="body"
@@ -179,8 +181,10 @@
         <label for="edit-custodian">Resguardante</label>
         <p-select
           inputId="edit-custodian"
-          formControlName="custodian"
-          [options]="userOptions()"
+          formControlName="custodianId"
+          [options]="custodianFormOptions()"
+          optionLabel="label"
+          optionValue="id"
           placeholder="Sin asignar"
           [showClear]="true"
           appendTo="body"
@@ -193,10 +197,12 @@
         <label for="edit-entity">Entidad</label>
         <p-select
           inputId="edit-entity"
-          formControlName="entity"
-          [options]="entityOptions()"
+          formControlName="entityId"
+          [options]="entityFormOptions()"
+          optionLabel="label"
+          optionValue="id"
           placeholder="Seleccionar entidad..."
-          [class.invalid]="isEditInvalid('entity')"
+          [class.invalid]="isEditInvalid('entityId')"
           appendTo="body"
           [filter]="true"
           filterPlaceholder="Buscar entidad..."
@@ -222,10 +228,12 @@
         <label for="edit-type">Tipo</label>
         <p-select
           inputId="edit-type"
-          formControlName="type"
-          [options]="typeOptions()"
+          formControlName="typeId"
+          [options]="typeFormOptions()"
+          optionLabel="label"
+          optionValue="id"
           placeholder="Seleccionar tipo..."
-          [class.invalid]="isEditInvalid('type')"
+          [class.invalid]="isEditInvalid('typeId')"
           appendTo="body"
           [filter]="true"
           filterPlaceholder="Buscar tipo..."
@@ -246,10 +254,12 @@
         <label for="edit-location">Ubicación</label>
         <p-select
           inputId="edit-location"
-          formControlName="location"
-          [options]="locationOptions()"
+          formControlName="locationId"
+          [options]="locationFormOptions()"
+          optionLabel="label"
+          optionValue="id"
           placeholder="Seleccionar ubicación..."
-          [class.invalid]="isEditInvalid('location')"
+          [class.invalid]="isEditInvalid('locationId')"
           appendTo="body"
           [filter]="true"
           filterPlaceholder="Buscar ubicación..."

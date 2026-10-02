@@ -8,10 +8,11 @@ import { Select } from 'primeng/select';
 import { MessageModule } from 'primeng/message';
 import { ListAreaManagersUseCase } from '../application/use-cases/ListAreaManagersUseCase';
 import { CreateAreaManagerUseCase } from '../application/use-cases/CreateAreaManagerUseCase';
+import { ToggleAreaManagerStatusUseCase } from '../application/use-cases/ToggleAreaManagerStatusUseCase';
 import { ListEntitiesUseCase } from '../application/use-cases/ListEntitiesUseCase';
 import { AreaManagerStore } from '../application/AreaManagerStore';
 import { EntityStore } from '../application/EntityStore';
-import { NewAreaManager } from '../domain/models/AreaManager';
+import { AreaManager, NewAreaManager } from '../domain/models/AreaManager';
 
 @Component({
   selector: 'app-area-manager-page',
@@ -23,6 +24,7 @@ export class AreaManagerPage implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly listAreaManagersUseCase = inject(ListAreaManagersUseCase);
   private readonly createAreaManagerUseCase = inject(CreateAreaManagerUseCase);
+  private readonly toggleAreaManagerStatusUseCase = inject(ToggleAreaManagerStatusUseCase);
   private readonly listEntitiesUseCase = inject(ListEntitiesUseCase);
   private readonly areaManagerStore = inject(AreaManagerStore);
   private readonly entityStore = inject(EntityStore);
@@ -30,8 +32,8 @@ export class AreaManagerPage implements OnInit {
   readonly entityOptions = computed(() =>
     this.entityStore
       .entities()
-      .filter((entity) => entity.level !== 0)
-      .map((entity) => entity.name),
+      .filter((entity) => entity.level !== 0 && entity.active)
+      .map((entity) => ({ id: entity.id, label: entity.name })),
   );
 
   readonly areaManagers = this.areaManagerStore.areaManagers;
@@ -41,9 +43,10 @@ export class AreaManagerPage implements OnInit {
   readonly showCreateDialog = signal(false);
   readonly submitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
+  readonly togglingIds = signal<ReadonlySet<string>>(new Set());
 
   readonly form = this.fb.nonNullable.group({
-    entity: ['', Validators.required],
+    entityId: ['', Validators.required],
     name: ['', Validators.required],
   });
 
@@ -53,6 +56,27 @@ export class AreaManagerPage implements OnInit {
       error: () => this.loading.set(false),
     });
     this.listEntitiesUseCase.execute().subscribe();
+  }
+
+  toggleStatus(areaManager: AreaManager): void {
+    if (this.togglingIds().has(areaManager.id)) {
+      return;
+    }
+
+    this.togglingIds.update((ids) => new Set(ids).add(areaManager.id));
+
+    const clearToggling = () => {
+      this.togglingIds.update((ids) => {
+        const next = new Set(ids);
+        next.delete(areaManager.id);
+        return next;
+      });
+    };
+
+    this.toggleAreaManagerStatusUseCase.execute(areaManager).subscribe({
+      next: clearToggling,
+      error: clearToggling,
+    });
   }
 
   isInvalid(controlName: keyof typeof this.form.controls): boolean {

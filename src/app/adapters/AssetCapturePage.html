@@ -20,13 +20,15 @@
       </div>
 
       <div class="field-group">
-        <label for="user">Usuario</label>
+        <label for="userId">Usuario</label>
         <p-select
-          inputId="user"
-          formControlName="user"
+          inputId="userId"
+          formControlName="userId"
           [options]="userOptions()"
+          optionLabel="label"
+          optionValue="id"
           placeholder="Seleccionar usuario..."
-          [class.invalid]="isInvalid('user')"
+          [class.invalid]="isInvalid('userId')"
           appendTo="body"
           [filter]="true"
           filterPlaceholder="Buscar usuario..."
@@ -34,13 +36,15 @@
       </div>
 
       <div class="field-group">
-        <label for="custodian">Resguardante</label>
+        <label for="custodianId">Resguardante</label>
         <p-select
-          inputId="custodian"
-          formControlName="custodian"
+          inputId="custodianId"
+          formControlName="custodianId"
           [options]="areaManagerOptions()"
+          optionLabel="label"
+          optionValue="id"
           placeholder="Seleccionar resguardante..."
-          [class.invalid]="isInvalid('custodian')"
+          [class.invalid]="isInvalid('custodianId')"
           appendTo="body"
           [filter]="true"
           filterPlaceholder="Buscar resguardante..."
@@ -48,13 +52,15 @@
       </div>
 
       <div class="field-group">
-        <label for="entity">Entidad</label>
+        <label for="entityId">Entidad</label>
         <p-select
-          inputId="entity"
-          formControlName="entity"
+          inputId="entityId"
+          formControlName="entityId"
           [options]="entityOptions()"
+          optionLabel="label"
+          optionValue="id"
           placeholder="Seleccionar entidad..."
-          [class.invalid]="isInvalid('entity')"
+          [class.invalid]="isInvalid('entityId')"
           appendTo="body"
           [filter]="true"
           filterPlaceholder="Buscar entidad..."
@@ -95,13 +101,15 @@
       </div>
 
       <div class="field-group">
-        <label for="type">Tipo</label>
+        <label for="typeId">Tipo</label>
         <p-select
-          inputId="type"
-          formControlName="type"
+          inputId="typeId"
+          formControlName="typeId"
           [options]="typeOptions()"
+          optionLabel="label"
+          optionValue="id"
           placeholder="Seleccionar tipo..."
-          [class.invalid]="isInvalid('type')"
+          [class.invalid]="isInvalid('typeId')"
           appendTo="body"
           [filter]="true"
           filterPlaceholder="Buscar tipo..."
@@ -130,13 +138,15 @@
         />
       </div>
       <div class="field-group">
-        <label for="location">Ubicación</label>
+        <label for="locationId">Ubicación</label>
         <p-select
-          inputId="location"
-          formControlName="location"
+          inputId="locationId"
+          formControlName="locationId"
           [options]="locationOptions()"
+          optionLabel="label"
+          optionValue="id"
           placeholder="Seleccionar ubicación..."
-          [class.invalid]="isInvalid('location')"
+          [class.invalid]="isInvalid('locationId')"
           appendTo="body"
           [filter]="true"
           filterPlaceholder="Buscar ubicación..."

@@ -4,11 +4,16 @@ export interface User {
   id: string;
   firstName: string;
   lastName: string;
-  email: string;
+  entityId: string;
   entity: string;
-  department: string;
+  locationId: string;
   location: string;
   status: UserStatus;
 }
 
-export type NewUser = Pick<User, 'firstName' | 'lastName' | 'entity' | 'department' | 'location'>;
+export interface NewUser {
+  firstName: string;
+  lastName: string;
+  entityId: string;
+  locationId: string;
+}

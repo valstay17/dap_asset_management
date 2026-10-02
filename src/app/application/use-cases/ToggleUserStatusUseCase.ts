@@ -13,6 +13,6 @@ export class ToggleUserStatusUseCase {
 
   execute(user: User): Observable<User> {
     const nextStatus = user.status === 'activo' ? 'inactivo' : 'activo';
-    return this.userPort.updateStatus(user.id, nextStatus).pipe(tap((updated) => this.userStore.updateUser(updated)));
+    return this.userPort.updateStatus(user, nextStatus).pipe(tap((updated) => this.userStore.updateUser(updated)));
   }
 }

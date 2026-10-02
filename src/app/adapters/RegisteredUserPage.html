@@ -59,7 +59,7 @@
       [loading]="loading()"
       [paginator]="true"
       [rows]="10"
-      [globalFilterFields]="['firstName', 'lastName', 'email', 'entity']"
+      [globalFilterFields]="['firstName', 'lastName', 'entity']"
       dataKey="id"
       styleClass="users-table"
     >
@@ -78,7 +78,6 @@
               <div class="user-avatar">{{ initialsByUserId()[user.id] }}</div>
               <div>
                 <p class="user-name">{{ user.firstName }} {{ user.lastName }}</p>
-                <p class="user-email">{{ user.email }}</p>
               </div>
             </div>
           </td>
@@ -131,13 +130,15 @@
     </div>
 
     <div class="field-group">
-      <label for="location">Ubicación</label>
+      <label for="locationId">Ubicación</label>
       <p-select
-        inputId="location"
-        formControlName="location"
+        inputId="locationId"
+        formControlName="locationId"
         [options]="locationOptions()"
+        optionLabel="label"
+        optionValue="id"
         placeholder="Seleccionar ubicación..."
-        [class.invalid]="isInvalid('location')"
+        [class.invalid]="isInvalid('locationId')"
         appendTo="body"
         [filter]="true"
         filterPlaceholder="Buscar ubicación..."
@@ -145,13 +146,15 @@
     </div>
 
     <div class="field-group">
-      <label for="entity">Entidad</label>
+      <label for="entityId">Entidad</label>
       <p-select
-        inputId="entity"
-        formControlName="entity"
-        [options]="entityOptions()"
+        inputId="entityId"
+        formControlName="entityId"
+        [options]="entityFormOptions()"
+        optionLabel="label"
+        optionValue="id"
         placeholder="Seleccionar entidad..."
-        [class.invalid]="isInvalid('entity')"
+        [class.invalid]="isInvalid('entityId')"
         scrollHeight="220px"
         appendTo="body"
         [filter]="true"

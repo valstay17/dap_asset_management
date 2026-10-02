@@ -48,17 +48,35 @@ export class AssetCapturePage implements OnInit {
   readonly statusOptions = STATUS_OPTIONS;
 
   readonly userOptions = computed(() =>
-    this.userStore.users().map((user) => `${user.firstName} ${user.lastName}`),
+    this.userStore
+      .users()
+      .filter((user) => user.status === 'activo')
+      .map((user) => ({ id: user.id, label: `${user.firstName} ${user.lastName}` })),
   );
   readonly entityOptions = computed(() =>
     this.entityStore
       .entities()
-      .filter((entity) => entity.level !== 0)
-      .map((entity) => entity.name),
+      .filter((entity) => entity.level !== 0 && entity.active)
+      .map((entity) => ({ id: entity.id, label: entity.name })),
   );
-  readonly locationOptions = computed(() => this.locationStore.locations().map(formatLocationLabel));
-  readonly typeOptions = computed(() => this.assetTypeStore.assetTypes().map((assetType) => assetType.name));
-  readonly areaManagerOptions = computed(() => this.areaManagerStore.areaManagers().map((areaManager) => areaManager.name));
+  readonly locationOptions = computed(() =>
+    this.locationStore
+      .locations()
+      .filter((location) => location.active)
+      .map((location) => ({ id: location.id, label: formatLocationLabel(location) })),
+  );
+  readonly typeOptions = computed(() =>
+    this.assetTypeStore
+      .assetTypes()
+      .filter((assetType) => assetType.active)
+      .map((assetType) => ({ id: assetType.id, label: assetType.name })),
+  );
+  readonly areaManagerOptions = computed(() =>
+    this.areaManagerStore
+      .areaManagers()
+      .filter((areaManager) => areaManager.active)
+      .map((areaManager) => ({ id: areaManager.id, label: areaManager.name })),
+  );
 
   readonly submitting = signal(false);
   readonly successMessage = signal<string | null>(null);
@@ -66,16 +84,16 @@ export class AssetCapturePage implements OnInit {
 
   readonly form = this.fb.nonNullable.group({
     name: ['', Validators.required],
-    user: ['', Validators.required],
-    custodian: ['', Validators.required],
-    entity: ['', Validators.required],
+    userId: ['', Validators.required],
+    custodianId: ['', Validators.required],
+    entityId: ['', Validators.required],
     manufacturer: [''],
     serialNumber: [''],
     inventoryNumber: [''],
-    type: ['', Validators.required],
+    typeId: ['', Validators.required],
     model: [''],
     operatingSystem: [''],
-    location: ['', Validators.required],
+    locationId: ['', Validators.required],
     processor: [''],
     memoryRAM: [''],
     hardDiskType: [''],
@@ -113,6 +131,7 @@ export class AssetCapturePage implements OnInit {
       next: (asset) => {
         this.submitting.set(false);
         this.successMessage.set(`Equipo "${asset.name}" registrado correctamente.`);
+        this.router.navigateByUrl('/capture/consulta');
       },
       error: () => {
         this.submitting.set(false);

@@ -6,12 +6,12 @@ import { AssetType, NewAssetType } from '../../domain/models/AssetType';
 const LATENCY_MS = 500;
 
 let seedAssetTypes: AssetType[] = [
-  { id: '1', name: 'Desktop' },
-  { id: '2', name: 'Laptop' },
-  { id: '3', name: 'Monitor' },
-  { id: '4', name: 'Teclado' },
-  { id: '5', name: 'Teléfono' },
-  { id: '6', name: 'Cloud' },
+  { id: '1', name: 'Desktop', active: true },
+  { id: '2', name: 'Laptop', active: true },
+  { id: '3', name: 'Monitor', active: true },
+  { id: '4', name: 'Teclado', active: true },
+  { id: '5', name: 'Teléfono', active: true },
+  { id: '6', name: 'Cloud', active: true },
 ];
 
 @Injectable({ providedIn: 'root' })
@@ -21,7 +21,7 @@ export class MockAssetTypeAdapter implements AssetTypePort {
   }
 
   create(input: NewAssetType): Observable<AssetType> {
-    const type: AssetType = { ...input, id: `${seedAssetTypes.length + 1}-${Date.now()}` };
+    const type: AssetType = { ...input, id: `${seedAssetTypes.length + 1}-${Date.now()}`, active: true };
     seedAssetTypes = [...seedAssetTypes, type];
     return of(type).pipe(delay(LATENCY_MS));
   }

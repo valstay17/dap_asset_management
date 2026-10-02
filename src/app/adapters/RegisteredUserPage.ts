@@ -54,7 +54,18 @@ export class RegisteredUserPage implements OnInit {
       .filter((entity) => entity.level !== 0)
       .map((entity) => entity.name),
   );
-  readonly locationOptions = computed(() => this.locationStore.locations().map(formatLocationLabel));
+  readonly entityFormOptions = computed(() =>
+    this.entityStore
+      .entities()
+      .filter((entity) => entity.level !== 0 && entity.active)
+      .map((entity) => ({ id: entity.id, label: entity.name })),
+  );
+  readonly locationOptions = computed(() =>
+    this.locationStore
+      .locations()
+      .filter((location) => location.active)
+      .map((location) => ({ id: location.id, label: formatLocationLabel(location) })),
+  );
 
   readonly users = this.userStore.users;
   readonly total = this.userStore.total;
@@ -70,9 +81,8 @@ export class RegisteredUserPage implements OnInit {
   readonly form = this.fb.nonNullable.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
-    entity: ['', Validators.required],
-    department: ['', Validators.required],
-    location: ['', Validators.required],
+    entityId: ['', Validators.required],
+    locationId: ['', Validators.required],
   });
 
   readonly initialsByUserId = computed(() => {

@@ -8,17 +8,17 @@ import { routes } from './app.routes';
 import { AUTH_PORT } from './domain/ports/AuthPort';
 import { HttpAuthAdapter } from './infrastructure/auth/HttpAuthAdapter';
 import { ASSET_PORT } from './domain/ports/AssetPort';
-import { MockAssetAdapter } from './infrastructure/assets/MockAssetAdapter';
+import { HttpAssetAdapter } from './infrastructure/assets/HttpAssetAdapter';
 import { USER_PORT } from './domain/ports/UserPort';
-import { MockUserAdapter } from './infrastructure/users/MockUserAdapter';
+import { HttpUserAdapter } from './infrastructure/users/HttpUserAdapter';
 import { ENTITY_PORT } from './domain/ports/EntityPort';
-import { MockEntityAdapter } from './infrastructure/entities/MockEntityAdapter';
+import { HttpEntityAdapter } from './infrastructure/entities/HttpEntityAdapter';
 import { LOCATION_PORT } from './domain/ports/LocationPort';
 import { HttpLocationAdapter } from './infrastructure/locations/HttpLocationAdapter';
 import { ASSET_TYPE_PORT } from './domain/ports/AssetTypePort';
-import { MockAssetTypeAdapter } from './infrastructure/asset-types/MockAssetTypeAdapter';
+import { HttpAssetTypeAdapter } from './infrastructure/asset-types/HttpAssetTypeAdapter';
 import { AREA_MANAGER_PORT } from './domain/ports/AreaManagerPort';
-import { MockAreaManagerAdapter } from './infrastructure/area-managers/MockAreaManagerAdapter';
+import { HttpAreaManagerAdapter } from './infrastructure/area-managers/HttpAreaManagerAdapter';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,11 +27,11 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: false } } }),
     { provide: AUTH_PORT, useClass: HttpAuthAdapter },
-    { provide: ASSET_PORT, useClass: MockAssetAdapter },
-    { provide: USER_PORT, useClass: MockUserAdapter },
-    { provide: ENTITY_PORT, useClass: MockEntityAdapter },
+    { provide: ASSET_PORT, useClass: HttpAssetAdapter },
+    { provide: USER_PORT, useClass: HttpUserAdapter },
+    { provide: ENTITY_PORT, useClass: HttpEntityAdapter },
     { provide: LOCATION_PORT, useClass: HttpLocationAdapter },
-    { provide: ASSET_TYPE_PORT, useClass: MockAssetTypeAdapter },
-    { provide: AREA_MANAGER_PORT, useClass: MockAreaManagerAdapter },
+    { provide: ASSET_TYPE_PORT, useClass: HttpAssetTypeAdapter },
+    { provide: AREA_MANAGER_PORT, useClass: HttpAreaManagerAdapter },
   ]
 };

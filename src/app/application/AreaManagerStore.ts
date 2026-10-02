@@ -15,4 +15,10 @@ export class AreaManagerStore {
   addAreaManager(areaManager: AreaManager): void {
     this.areaManagersState.update((areaManagers) => [...areaManagers, areaManager]);
   }
+
+  updateAreaManager(areaManager: AreaManager): void {
+    this.areaManagersState.update((areaManagers) =>
+      areaManagers.map((existing) => (existing.id === areaManager.id ? areaManager : existing)),
+    );
+  }
 }

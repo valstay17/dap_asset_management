@@ -55,6 +55,24 @@
   color: var(--on-surface-variant);
 }
 
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: #e4f6ea;
+  color: #1e7a3d;
+}
+
+.status-badge--inactive {
+  background: var(--surface-low);
+  color: var(--on-surface-variant);
+}
+
 :host ::ng-deep .types-table .p-datatable-thead > tr > th {
   background: var(--surface-low);
   font-size: 0.68rem;

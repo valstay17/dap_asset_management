@@ -1,6 +1,7 @@
 export interface AssetType {
   id: string;
   name: string;
+  active: boolean;
 }
 
-export type NewAssetType = Omit<AssetType, 'id'>;
+export type NewAssetType = Pick<AssetType, 'name'>;

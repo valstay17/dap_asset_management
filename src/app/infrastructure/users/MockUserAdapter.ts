@@ -10,9 +10,9 @@ let seedUsers: User[] = [
     id: '1',
     firstName: 'Ricardo',
     lastName: 'Hernández',
-    email: 'r.hernandez@assetprecision.com',
+    entityId: '2',
     entity: 'Recursos Humanos de la DAP',
-    department: 'Dirección General',
+    locationId: '1',
     location: 'Edificio N — Canal de Apatlaco, Iztacalco, CDMX (Planta alta)',
     status: 'activo',
   },
@@ -20,9 +20,9 @@ let seedUsers: User[] = [
     id: '2',
     firstName: 'Adriana',
     lastName: 'Martínez',
-    email: 'a.martinez@it-division.com',
+    entityId: '1',
     entity: 'Area de Tecnologías de la Información y Comunicaciones',
-    department: 'Tecnologías de Información',
+    locationId: '2',
     location: 'Edificio M — Canal de Apatlaco, Iztacalco, CDMX (Planta baja)',
     status: 'inactivo',
   },
@@ -35,25 +35,25 @@ export class MockUserAdapter implements UserPort {
   }
 
   create(input: NewUser): Observable<User> {
-    const slug = `${input.firstName[0] ?? ''}.${input.lastName}`.toLowerCase().replace(/\s+/g, '');
     const user: User = {
       ...input,
       id: `${seedUsers.length + 1}-${Date.now()}`,
-      email: `${slug}@assetprecision.com`,
+      entity: input.entityId,
+      location: input.locationId,
       status: 'activo',
     };
     seedUsers = [user, ...seedUsers];
     return of(user).pipe(delay(LATENCY_MS));
   }
 
-  updateStatus(id: string, status: UserStatus): Observable<User> {
-    const existing = seedUsers.find((user) => user.id === id);
+  updateStatus(user: User, status: UserStatus): Observable<User> {
+    const existing = seedUsers.find((seed) => seed.id === user.id);
     if (!existing) {
       return throwError(() => new Error('Usuario no encontrado')).pipe(delay(LATENCY_MS));
     }
 
     const updated: User = { ...existing, status };
-    seedUsers = seedUsers.map((user) => (user.id === id ? updated : user));
+    seedUsers = seedUsers.map((seed) => (seed.id === user.id ? updated : seed));
     return of(updated).pipe(delay(LATENCY_MS));
   }
 }

@@ -1,7 +1,12 @@
 export interface AreaManager {
   id: string;
   name: string;
+  entityId: string;
   entity: string;
+  active: boolean;
 }
 
-export type NewAreaManager = Omit<AreaManager, 'id'>;
+export interface NewAreaManager {
+  name: string;
+  entityId: string;
+}

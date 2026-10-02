@@ -46,19 +46,23 @@
       <input id="name" type="text" pInputText formControlName="name" placeholder="Ej. Recursos Humanos" [class.invalid]="isInvalid('name')" />
     </div>
 
-    <div class="field-group">
-      <label for="parentId">Entidad Padre</label>
-      <p-select
-        inputId="parentId"
-        formControlName="parentId"
-        [options]="parentOptions()"
-        optionLabel="label"
-        optionValue="id"
-        placeholder="Seleccionar entidad padre..."
-        [class.invalid]="isInvalid('parentId')"
-        appendTo="body"
-      />
-    </div>
+    @if (root()) {
+      <div class="field-group">
+        <label for="parentId">Entidad Padre</label>
+        <p-select
+          inputId="parentId"
+          formControlName="parentId"
+          [options]="parentOptions()"
+          optionLabel="label"
+          optionValue="id"
+          placeholder="Seleccionar entidad padre..."
+          [class.invalid]="isInvalid('parentId')"
+          appendTo="body"
+        />
+      </div>
+    } @else {
+      <p class="root-hint">Esta será la entidad raíz de la jerarquía (sin entidad padre).</p>
+    }
 
     @if (errorMessage()) {
       <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />

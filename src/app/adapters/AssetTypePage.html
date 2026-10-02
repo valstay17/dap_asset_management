@@ -12,16 +12,22 @@
       <ng-template #header>
         <tr>
           <th>Tipo</th>
+          <th>Estado</th>
         </tr>
       </ng-template>
       <ng-template #body let-assetType>
         <tr>
           <td class="name-cell">{{ assetType.name }}</td>
+          <td>
+            <span class="status-badge" [class.status-badge--inactive]="!assetType.active">
+              {{ assetType.active ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
         </tr>
       </ng-template>
       <ng-template #emptymessage>
         <tr>
-          <td class="empty-row">No hay tipos registrados.</td>
+          <td colspan="2" class="empty-row">No hay tipos registrados.</td>
         </tr>
       </ng-template>
     </p-table>
