@@ -14,4 +14,17 @@ export class AssetTypeStore {
   addAssetType(assetType: AssetType): void {
     this.assetTypesState.update((assetTypes) => [...assetTypes, assetType]);
   }
+
+  updateAssetType(assetType: AssetType): void {
+    this.assetTypesState.update((assetTypes) =>
+      assetTypes.map((existing) => (existing.id === assetType.id ? assetType : existing)),
+    );
+  }
+
+  // Baja lógica: se conserva para resolver tipos en registros existentes.
+  deactivateAssetType(id: string): void {
+    this.assetTypesState.update((assetTypes) =>
+      assetTypes.map((existing) => (existing.id === id ? { ...existing, active: false } : existing)),
+    );
+  }
 }

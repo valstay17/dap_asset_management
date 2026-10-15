@@ -97,6 +97,12 @@
   white-space: nowrap;
 }
 
+.pending-fields {
+  margin: 0;
+  text-align: center;
+  color: var(--on-surface-variant);
+}
+
 .form-actions {
   display: flex;
   justify-content: flex-end;

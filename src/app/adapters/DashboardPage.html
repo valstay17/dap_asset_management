@@ -1,10 +1,6 @@
 <!-- Navbar -->
 <p-toolbar class="navbar" [class.scrolled]="isScrolled">
   <ng-template #start>
-    <div class="navbar-actions">
-      <p-button icon="pi pi-bell" severity="secondary" [text]="true" [rounded]="true" />
-      <p-button icon="pi pi-cog"  severity="secondary" [text]="true" [rounded]="true" />
-    </div>
   </ng-template>
   <ng-template #end>
     <button type="button" class="navbar-user" (click)="userMenu.toggle($event)">

@@ -102,7 +102,12 @@ function toAsset(dto: ResguardoDto): Asset {
   };
 }
 
-function toResguardoPayload(input: NewAsset): ResguardoPayload {
+function toNewAsset(asset: Asset): NewAsset {
+  const { id, user, custodian, entity, type, location, updatedAt, ...input } = asset;
+  return input;
+}
+
+function toResguardoPayload(input: NewAsset, active = true): ResguardoPayload {
   return {
     personal: input.userId ? { idPersonal: Number(input.userId) } : null,
     responsable: input.custodianId ? { idJefatura: Number(input.custodianId) } : null,
@@ -123,7 +128,7 @@ function toResguardoPayload(input: NewAsset): ResguardoPayload {
     direccionIp: input.networkAddress,
     direccionMac: input.macAddress,
     direccionMacRed: input.macAddressNetwork,
-    active: true,
+    active,
   };
 }
 
@@ -158,5 +163,19 @@ export class HttpAssetAdapter implements AssetPort {
     return this.http
       .delete<ResguardoDto>(`${environment.resguardoDeleteById}/${id}`, { headers })
       .pipe(map(() => undefined));
+  }
+
+  listRetired(): Observable<Asset[]> {
+    const headers = this.tokenService.loggedHeader();
+    return this.http
+      .get<ResguardoDto[] | null>(environment.resguardoFindAll, { headers })
+      .pipe(map((dtos) => (dtos ?? []).filter((dto) => !dto.active).map(toAsset)));
+  }
+
+  retire(asset: Asset): Observable<Asset> {
+    const headers = this.tokenService.loggedHeader();
+    return this.http
+      .put<ResguardoDto>(`${environment.resguardoUpdate}/${asset.id}`, toResguardoPayload(toNewAsset(asset), false), { headers })
+      .pipe(map(toAsset));
   }
 }

@@ -8,6 +8,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { Select } from 'primeng/select';
 import { MessageModule } from 'primeng/message';
+import { TooltipModule } from 'primeng/tooltip';
 import { ListUsersUseCase } from '../application/use-cases/ListUsersUseCase';
 import { CreateUserUseCase } from '../application/use-cases/CreateUserUseCase';
 import { ToggleUserStatusUseCase } from '../application/use-cases/ToggleUserStatusUseCase';
@@ -32,6 +33,7 @@ import { Avatar } from "primeng/avatar";
     InputIconModule,
     Select,
     MessageModule,
+    TooltipModule,
     Avatar
 ],
   templateUrl: './RegisteredUserPage.html',
@@ -77,6 +79,7 @@ export class RegisteredUserPage implements OnInit {
   readonly submitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
   readonly togglingIds = signal<ReadonlySet<string>>(new Set());
+  readonly editingUser = signal<User | null>(null);
 
   readonly form = this.fb.nonNullable.group({
     firstName: ['', Validators.required],
@@ -130,7 +133,20 @@ export class RegisteredUserPage implements OnInit {
 
   openCreateDialog(): void {
     this.errorMessage.set(null);
+    this.editingUser.set(null);
     this.form.reset();
+    this.showCreateDialog.set(true);
+  }
+
+  openEditDialog(user: User): void {
+    this.errorMessage.set(null);
+    this.editingUser.set(user);
+    this.form.reset({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      entityId: user.entityId,
+      locationId: user.locationId,
+    });
     this.showCreateDialog.set(true);
   }
 
@@ -144,19 +160,41 @@ export class RegisteredUserPage implements OnInit {
       return;
     }
 
+    const payload = this.form.getRawValue() as NewUser;
+
+    // TODO: conectar con el endpoint de actualización cuando esté disponible; por ahora solo afecta la vista.
+    const editing = this.editingUser();
+    if (editing) {
+      const entity = this.entityStore.entities().find((candidate) => candidate.id === payload.entityId);
+      const location = this.locationStore.locations().find((candidate) => candidate.id === payload.locationId);
+      this.userStore.updateUser({
+        ...editing,
+        ...payload,
+        entity: entity?.name ?? editing.entity,
+        location: location ? formatLocationLabel(location) : editing.location,
+      });
+      this.closeAndResetForm();
+      return;
+    }
+
     this.submitting.set(true);
     this.errorMessage.set(null);
 
-    this.createUserUseCase.execute(this.form.getRawValue() as NewUser).subscribe({
+    this.createUserUseCase.execute(payload).subscribe({
       next: () => {
         this.submitting.set(false);
-        this.showCreateDialog.set(false);
-        this.form.reset();
+        this.closeAndResetForm();
       },
       error: () => {
         this.submitting.set(false);
         this.errorMessage.set('No se pudo registrar el usuario. Intenta nuevamente.');
       },
     });
+  }
+
+  private closeAndResetForm(): void {
+    this.showCreateDialog.set(false);
+    this.editingUser.set(null);
+    this.form.reset();
   }
 }

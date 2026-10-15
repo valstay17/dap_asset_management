@@ -7,6 +7,8 @@ export interface AssetPort {
   create(asset: NewAsset): Observable<Asset>;
   update(id: string, changes: NewAsset): Observable<Asset>;
   delete(id: string): Observable<void>;
+  listRetired(): Observable<Asset[]>;
+  retire(asset: Asset): Observable<Asset>;
 }
 
 export const ASSET_PORT = new InjectionToken<AssetPort>('ASSET_PORT');

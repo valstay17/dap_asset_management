@@ -1,3 +1,5 @@
+<p-confirmDialog [style]="{ width: '26rem' }" />
+
 <div class="locations-page">
   <header class="locations-header">
     <div>
@@ -14,6 +16,7 @@
           <th>Edificio / Lugar</th>
           <th>Dirección</th>
           <th>Planta</th>
+          <th class="actions-header">Acciones</th>
         </tr>
       </ng-template>
       <ng-template #body let-location>
@@ -27,11 +30,31 @@
               <span class="floor-badge floor-badge--none">—</span>
             }
           </td>
+          <td>
+            <div class="actions-cell">
+              <p-button
+                icon="pi pi-pencil"
+                severity="secondary"
+                [text]="true"
+                [rounded]="true"
+                pTooltip="Editar ubicación"
+                (onClick)="openEditDialog(location)"
+              />
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                [text]="true"
+                [rounded]="true"
+                pTooltip="Eliminar ubicación"
+                (onClick)="confirmDelete(location)"
+              />
+            </div>
+          </td>
         </tr>
       </ng-template>
       <ng-template #emptymessage>
         <tr>
-          <td colspan="3" class="empty-row">No hay ubicaciones registradas.</td>
+          <td colspan="4" class="empty-row">No hay ubicaciones registradas.</td>
         </tr>
       </ng-template>
     </p-table>
@@ -39,7 +62,7 @@
 </div>
 
 <p-dialog
-  header="Nueva Ubicación"
+  [header]="editingLocation() ? 'Editar Ubicación' : 'Nueva Ubicación'"
   [modal]="true"
   [visible]="showCreateDialog()"
   (visibleChange)="showCreateDialog.set($event)"
@@ -82,7 +105,7 @@
 
     <div class="form-actions">
       <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="closeCreateDialog()" />
-      <p-button type="submit" [label]="submitting() ? 'Guardando...' : 'Guardar Ubicación'" [loading]="submitting()" />
+      <p-button type="submit" [label]="submitting() ? 'Guardando...' : editingLocation() ? 'Guardar Cambios' : 'Guardar Ubicación'" [loading]="submitting()" />
     </div>
   </form>
 </p-dialog>

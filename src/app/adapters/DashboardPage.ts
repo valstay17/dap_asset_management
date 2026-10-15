@@ -34,13 +34,17 @@ export class DashboardPage {
   });
 
   readonly cards = [
-    { icon: 'inventory_2',  title: 'Captura de Bienes Informáticos', description: 'Registro y alta de nuevos equipos tecnológicos en el inventario global de la institución.',   route: '/capture/captura'},
-    { icon: 'search_check', title: 'Consulta de Equipos',            description: 'Búsqueda avanzada y visualización técnica detallada de todo el parque informático activo.',     route: '/capture/consulta'},
-    { icon: 'group_add',    title: 'Registro de Usuarios',           description: 'Administración de perfiles, permisos y acceso del personal técnico al ecosistema digital.',      route: '/capture/usuarios'},
-    { icon: 'badge',        title: 'Jefes de Área',                  description: 'Administración de responsables por entidad autorizados para el resguardo de equipos.',         route: '/capture/jefes-area'},
-    { icon: 'apartment',    title: 'Entidades',                      description: 'Gestión jerárquica de dependencias, departamentos y centros operativos autorizados.',             route: '/capture/entidades'},
-    { icon: 'distance',     title: 'Ubicaciones',                    description: 'Control geográfico y georreferenciación de activos distribuidos en la red territorial.',          route: '/capture/ubicaciones'},
-    { icon: 'picture_as_pdf', title: 'Registro',                     description: 'Generación de registros en PDF de los bienes asignados, filtrados por usuario.',                   route: '/capture/registro'},
+    { icon: 'inventory_2',  title: 'Captura de Bienes Informáticos', description: 'Registro y alta de nuevos equipos tecnológicos en el inventario global de la institución.', route: '/capture/captura'},
+    { icon: 'call',         title: 'Captura de Teléfonos',           description: 'Registro de teléfonos con su número de inventario, entidad y dirección IP.', route: '/capture/telefonos'},
+    { icon: 'desktop_windows', title: 'Captura de Monitores',        description: 'Registro de monitores asignados a las distintas entidades.', route: '/capture/monitores'},
+    { icon: 'print',        title: 'Captura de Impresoras',          description: 'Registro de impresoras y equipos de impresión distribuidos en las entidades.',   route: '/capture/impresoras'},
+    { icon: 'search_check', title: 'Consulta de Equipos',            description: 'Búsqueda avanzada y visualización técnica detallada de todo el parque informático activo.',    route: '/capture/consulta'},
+    { icon: 'delete_sweep', title: 'Bajas de Equipos',               description: 'Baja de bienes informáticos del inventario activo y exportación a Excel del historial de bajas.', route: '/capture/bajas'},
+    { icon: 'group_add',    title: 'Registro de Usuarios',           description: 'Administración de perfiles, permisos y acceso del personal técnico al ecosistema digital.',     route: '/capture/usuarios'},
+    { icon: 'badge',        title: 'Jefes de Área',                  description: 'Administración de responsables por entidad autorizados para el resguardo de equipos.',    route: '/capture/jefes-area'},
+    { icon: 'apartment',    title: 'Entidades',                      description: 'Gestión jerárquica de dependencias, departamentos y centros operativos autorizados.',    route: '/capture/entidades'},
+    { icon: 'distance',     title: 'Ubicaciones',                    description: 'Control geográfico y georreferenciación de activos distribuidos en la red territorial.',    route: '/capture/ubicaciones'},
+    { icon: 'picture_as_pdf', title: 'Registro',                     description: 'Generación de registros en PDF de los bienes asignados, filtrados por usuario.',   route: '/capture/registro'},
   ];
 
   @HostListener('window:scroll')
