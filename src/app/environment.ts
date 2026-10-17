@@ -1,5 +1,5 @@
-const baseUrl = 'http://localhost:8086/dap/asset';
-//const baseUrl = 'https://it.sobse.com.mx/dap/asset';
+// const baseUrl = 'http://localhost:8086/dap/asset';
+const baseUrl = 'https://it.sobse.com.mx/dap/asset';
 export const environment = {
   production: true,
   baseUrl: baseUrl,
@@ -29,4 +29,7 @@ export const environment = {
   resguardoSave: baseUrl + '/v1/resguardoController/save',
   resguardoUpdate: baseUrl + '/v1/resguardoController/update',
   resguardoDeleteById: baseUrl + '/v1/resguardoController/deleteById',
+  telefonoSave: baseUrl + '/v1/telefonoController/save',
+  monitorSave: baseUrl + '/v1/monitorController/save',
+  impresoraSave: baseUrl + '/v1/impresoraController/save',
 };
