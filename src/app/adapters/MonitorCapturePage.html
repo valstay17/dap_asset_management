@@ -47,72 +47,13 @@
       </div>
 
       <div class="field-group">
-        <label for="custodianId">Resguardante</label>
-        <p-select
-          inputId="custodianId"
-          formControlName="custodianId"
-          [options]="areaManagerOptions()"
-          optionLabel="label"
-          optionValue="id"
-          placeholder="Seleccionar resguardante..."
-          [class.invalid]="isInvalid('custodianId')"
-          appendTo="body"
-          [filter]="true"
-          filterPlaceholder="Buscar resguardante..."
-        />
-      </div>
-
-      <div class="field-group">
-        <label for="userId">Usuario</label>
-        <p-select
-          inputId="userId"
-          formControlName="userId"
-          [options]="userOptions()"
-          optionLabel="label"
-          optionValue="id"
-          placeholder="Seleccionar usuario..."
-          [class.invalid]="isInvalid('userId')"
-          appendTo="body"
-          [filter]="true"
-          filterPlaceholder="Buscar usuario..."
-        />
-      </div>
-
-      <div class="field-group">
-        <label for="locationId">Ubicación</label>
-        <p-select
-          inputId="locationId"
-          formControlName="locationId"
-          [options]="locationOptions()"
-          optionLabel="label"
-          optionValue="id"
-          placeholder="Seleccionar ubicación..."
-          [class.invalid]="isInvalid('locationId')"
-          appendTo="body"
-          [filter]="true"
-          filterPlaceholder="Buscar ubicación..."
-        />
-      </div>
-
-      <div class="field-group">
-        <label for="manufacturer">Fabricante</label>
+        <label for="brand">Marca</label>
         <input
-          id="manufacturer"
+          id="brand"
           type="text"
-          formControlName="manufacturer"
+          formControlName="brand"
           placeholder="DELL"
-          [class.invalid]="isInvalid('manufacturer')"
-        />
-      </div>
-
-      <div class="field-group">
-        <label for="type">Tipo</label>
-        <input
-          id="type"
-          type="text"
-          formControlName="type"
-          placeholder="LED"
-          [class.invalid]="isInvalid('type')"
+          [class.invalid]="isInvalid('brand')"
         />
       </div>
 
@@ -124,6 +65,17 @@
           formControlName="model"
           placeholder="P2422H"
           [class.invalid]="isInvalid('model')"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="networkAddress">Dirección IP</label>
+        <input
+          id="networkAddress"
+          type="text"
+          formControlName="networkAddress"
+          placeholder="192.168.0.1"
+          [class.invalid]="isInvalid('networkAddress')"
         />
       </div>
 
@@ -142,11 +94,14 @@
     </div>
 
     @if (infoMessage()) {
-      <p-message severity="info" [text]="infoMessage()!" styleClass="w-full" />
+      <p-message severity="success" [text]="infoMessage()!" styleClass="w-full" />
+    }
+    @if (errorMessage()) {
+      <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
     }
 
     <div class="form-actions">
-      <p-button type="submit" label="Registrar monitor" icon="pi pi-save" />
+      <p-button type="submit" label="Registrar monitor" icon="pi pi-save" [loading]="saving()" />
     </div>
   </form>
 </div>

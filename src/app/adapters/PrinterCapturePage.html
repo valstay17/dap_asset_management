@@ -20,13 +20,13 @@
       </div>
 
       <div class="field-group">
-        <label for="model">Modelo</label>
+        <label for="brand">Marca</label>
         <input
-          id="model"
+          id="brand"
           type="text"
-          formControlName="model"
-          placeholder="LaserJet Pro M404dn"
-          [class.invalid]="isInvalid('model')"
+          formControlName="brand"
+          placeholder="HP"
+          [class.invalid]="isInvalid('brand')"
         />
       </div>
 
@@ -67,39 +67,7 @@
           filterPlaceholder="Buscar ubicación..."
         />
       </div>
-
-      <div class="field-group">
-        <label for="entityId">Entidad</label>
-        <p-select
-          inputId="entityId"
-          formControlName="entityId"
-          [options]="entityOptions()"
-          optionLabel="label"
-          optionValue="id"
-          placeholder="Seleccionar entidad..."
-          [class.invalid]="isInvalid('entityId')"
-          appendTo="body"
-          [filter]="true"
-          filterPlaceholder="Buscar entidad..."
-        />
-      </div>
-
-      <div class="field-group">
-        <label for="custodianId">Resguardante</label>
-        <p-select
-          inputId="custodianId"
-          formControlName="custodianId"
-          [options]="areaManagerOptions()"
-          optionLabel="label"
-          optionValue="id"
-          placeholder="Seleccionar resguardante..."
-          [class.invalid]="isInvalid('custodianId')"
-          appendTo="body"
-          [filter]="true"
-          filterPlaceholder="Buscar resguardante..."
-        />
-      </div>
-
+      
       <div class="field-group">
         <label for="manufacturer">Fabricante</label>
         <input
@@ -126,11 +94,14 @@
     </div>
 
     @if (infoMessage()) {
-      <p-message severity="info" [text]="infoMessage()!" styleClass="w-full" />
+      <p-message severity="success" [text]="infoMessage()!" styleClass="w-full" />
+    }
+    @if (errorMessage()) {
+      <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
     }
 
     <div class="form-actions">
-      <p-button type="submit" label="Registrar impresora" icon="pi pi-save" />
+      <p-button type="submit" label="Registrar impresora" icon="pi pi-save" [loading]="saving()" />
     </div>
   </form>
 </div>

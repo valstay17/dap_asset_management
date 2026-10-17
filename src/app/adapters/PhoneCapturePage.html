@@ -78,14 +78,28 @@
           [class.invalid]="isInvalid('networkAddress')"
         />
       </div>
+
+      <div class="field-group">
+        <label for="extension">Extensión</label>
+        <input
+          id="extension"
+          type="text"
+          formControlName="extension"
+          placeholder="1234"
+          [class.invalid]="isInvalid('extension')"
+        />
+      </div>
     </div>
 
     @if (infoMessage()) {
-      <p-message severity="info" [text]="infoMessage()!" styleClass="w-full" />
+      <p-message severity="success" [text]="infoMessage()!" styleClass="w-full" />
+    }
+    @if (errorMessage()) {
+      <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
     }
 
     <div class="form-actions">
-      <p-button type="submit" label="Registrar teléfono" icon="pi pi-save" />
+      <p-button type="submit" label="Registrar teléfono" icon="pi pi-save" [loading]="saving()" />
     </div>
   </form>
 </div>
