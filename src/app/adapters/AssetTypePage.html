@@ -1,3 +1,5 @@
+<p-confirmDialog [style]="{ width: '26rem' }" />
+
 <div class="types-page">
   <header class="types-header">
     <div>
@@ -13,6 +15,7 @@
         <tr>
           <th>Tipo</th>
           <th>Estado</th>
+          <th class="actions-header">Acciones</th>
         </tr>
       </ng-template>
       <ng-template #body let-assetType>
@@ -23,11 +26,31 @@
               {{ assetType.active ? 'Activo' : 'Inactivo' }}
             </span>
           </td>
+          <td>
+            <div class="actions-cell">
+              <p-button
+                icon="pi pi-pencil"
+                severity="secondary"
+                [text]="true"
+                [rounded]="true"
+                pTooltip="Editar tipo"
+                (onClick)="openEditDialog(assetType)"
+              />
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                [text]="true"
+                [rounded]="true"
+                pTooltip="Eliminar tipo"
+                (onClick)="confirmDelete(assetType)"
+              />
+            </div>
+          </td>
         </tr>
       </ng-template>
       <ng-template #emptymessage>
         <tr>
-          <td colspan="2" class="empty-row">No hay tipos registrados.</td>
+          <td colspan="3" class="empty-row">No hay tipos registrados.</td>
         </tr>
       </ng-template>
     </p-table>
@@ -35,7 +58,7 @@
 </div>
 
 <p-dialog
-  header="Nuevo Tipo"
+  [header]="editingAssetType() ? 'Editar Tipo' : 'Nuevo Tipo'"
   [modal]="true"
   [visible]="showCreateDialog()"
   (visibleChange)="showCreateDialog.set($event)"
@@ -53,7 +76,7 @@
 
     <div class="form-actions">
       <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="closeCreateDialog()" />
-      <p-button type="submit" [label]="submitting() ? 'Guardando...' : 'Guardar Tipo'" [loading]="submitting()" />
+      <p-button type="submit" [label]="submitting() ? 'Guardando...' : editingAssetType() ? 'Guardar Cambios' : 'Guardar Tipo'" [loading]="submitting()" />
     </div>
   </form>
 </p-dialog>

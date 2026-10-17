@@ -1,3 +1,5 @@
+<p-confirmDialog [style]="{ width: '26rem' }" />
+
 <div class="entities-page">
   <header class="entities-header">
     <div>
@@ -12,6 +14,7 @@
       <ng-template #header>
         <tr>
           <th>Nombre</th>
+          <th class="actions-header">Acciones</th>
         </tr>
       </ng-template>
       <ng-template #body let-rowNode let-entity="rowData">
@@ -22,11 +25,31 @@
               {{ entity.name }}
             </div>
           </td>
+          <td>
+            <div class="actions-cell">
+              <p-button
+                icon="pi pi-pencil"
+                severity="secondary"
+                [text]="true"
+                [rounded]="true"
+                pTooltip="Editar entidad"
+                (onClick)="openEditDialog(entity)"
+              />
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                [text]="true"
+                [rounded]="true"
+                pTooltip="Eliminar entidad"
+                (onClick)="confirmDelete(entity)"
+              />
+            </div>
+          </td>
         </tr>
       </ng-template>
       <ng-template #emptymessage>
         <tr>
-          <td class="empty-row">No hay entidades registradas.</td>
+          <td class="empty-row" colspan="2">No hay entidades registradas.</td>
         </tr>
       </ng-template>
     </p-treetable>
@@ -34,7 +57,7 @@
 </div>
 
 <p-dialog
-  header="Nueva Entidad"
+  [header]="editingEntity() ? 'Editar Entidad' : 'Nueva Entidad'"
   [modal]="true"
   [visible]="showCreateDialog()"
   (visibleChange)="showCreateDialog.set($event)"
@@ -46,7 +69,7 @@
       <input id="name" type="text" pInputText formControlName="name" placeholder="Ej. Recursos Humanos" [class.invalid]="isInvalid('name')" />
     </div>
 
-    @if (root()) {
+    @if (showParentField()) {
       <div class="field-group">
         <label for="parentId">Entidad Padre</label>
         <p-select
@@ -61,7 +84,9 @@
         />
       </div>
     } @else {
-      <p class="root-hint">Esta será la entidad raíz de la jerarquía (sin entidad padre).</p>
+      <p class="root-hint">
+        {{ editingEntity() ? 'Esta es la entidad raíz de la jerarquía (sin entidad padre).' : 'Esta será la entidad raíz de la jerarquía (sin entidad padre).' }}
+      </p>
     }
 
     @if (errorMessage()) {
@@ -70,7 +95,7 @@
 
     <div class="form-actions">
       <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="closeCreateDialog()" />
-      <p-button type="submit" [label]="submitting() ? 'Guardando...' : 'Guardar Entidad'" [loading]="submitting()" />
+      <p-button type="submit" [label]="submitting() ? 'Guardando...' : editingEntity() ? 'Guardar Cambios' : 'Guardar Entidad'" [loading]="submitting()" />
     </div>
   </form>
 </p-dialog>

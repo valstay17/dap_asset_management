@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { Asset } from '../../domain/models/Asset';
 
-interface Column {
+export interface Column {
   header: string;
   width: number;
   getValue: (asset: Asset) => string;
 }
 
-const COLUMNS: Column[] = [
+export const COLUMNS: Column[] = [
   { header: 'Nombre', width: 16, getValue: (asset) => asset.name },
   { header: 'Usuario', width: 28, getValue: (asset) => asset.user || 'Sin asignar' },
   { header: 'Resguardante', width: 28, getValue: (asset) => asset.custodian || 'Sin asignar' },

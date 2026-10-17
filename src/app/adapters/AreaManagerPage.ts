@@ -6,6 +6,7 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
 import { MessageModule } from 'primeng/message';
+import { TooltipModule } from 'primeng/tooltip';
 import { ListAreaManagersUseCase } from '../application/use-cases/ListAreaManagersUseCase';
 import { CreateAreaManagerUseCase } from '../application/use-cases/CreateAreaManagerUseCase';
 import { ToggleAreaManagerStatusUseCase } from '../application/use-cases/ToggleAreaManagerStatusUseCase';
@@ -16,7 +17,16 @@ import { AreaManager, NewAreaManager } from '../domain/models/AreaManager';
 
 @Component({
   selector: 'app-area-manager-page',
-  imports: [ReactiveFormsModule, ButtonModule, TableModule, DialogModule, InputTextModule, Select, MessageModule],
+  imports: [
+    ReactiveFormsModule,
+    ButtonModule,
+    TableModule,
+    DialogModule,
+    InputTextModule,
+    Select,
+    MessageModule,
+    TooltipModule,
+  ],
   templateUrl: './AreaManagerPage.html',
   styleUrl: './AreaManagerPage.css',
 })
@@ -44,6 +54,7 @@ export class AreaManagerPage implements OnInit {
   readonly submitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
   readonly togglingIds = signal<ReadonlySet<string>>(new Set());
+  readonly editingAreaManager = signal<AreaManager | null>(null);
 
   readonly form = this.fb.nonNullable.group({
     entityId: ['', Validators.required],
@@ -86,7 +97,15 @@ export class AreaManagerPage implements OnInit {
 
   openCreateDialog(): void {
     this.errorMessage.set(null);
+    this.editingAreaManager.set(null);
     this.form.reset();
+    this.showCreateDialog.set(true);
+  }
+
+  openEditDialog(areaManager: AreaManager): void {
+    this.errorMessage.set(null);
+    this.editingAreaManager.set(areaManager);
+    this.form.reset({ entityId: areaManager.entityId, name: areaManager.name });
     this.showCreateDialog.set(true);
   }
 
@@ -100,19 +119,39 @@ export class AreaManagerPage implements OnInit {
       return;
     }
 
+    const payload = this.form.getRawValue() as NewAreaManager;
+
+    // TODO: conectar con el endpoint de actualización cuando esté disponible; por ahora solo afecta la vista.
+    const editing = this.editingAreaManager();
+    if (editing) {
+      const entity = this.entityStore.entities().find((candidate) => candidate.id === payload.entityId);
+      this.areaManagerStore.updateAreaManager({
+        ...editing,
+        ...payload,
+        entity: entity?.name ?? editing.entity,
+      });
+      this.closeAndResetForm();
+      return;
+    }
+
     this.submitting.set(true);
     this.errorMessage.set(null);
 
-    this.createAreaManagerUseCase.execute(this.form.getRawValue() as NewAreaManager).subscribe({
+    this.createAreaManagerUseCase.execute(payload).subscribe({
       next: () => {
         this.submitting.set(false);
-        this.showCreateDialog.set(false);
-        this.form.reset();
+        this.closeAndResetForm();
       },
       error: () => {
         this.submitting.set(false);
         this.errorMessage.set('No se pudo registrar el jefe de área. Intenta nuevamente.');
       },
     });
+  }
+
+  private closeAndResetForm(): void {
+    this.showCreateDialog.set(false);
+    this.editingAreaManager.set(null);
+    this.form.reset();
   }
 }

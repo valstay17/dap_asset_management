@@ -1,0 +1,151 @@
+<p-confirmDialog [style]="{ width: '26rem' }" />
+
+<div class="retirement-page">
+  <header class="retirement-header">
+    <div>
+      <h1>Bajas de Equipos</h1>
+      <p>Da de baja bienes informáticos y exporta a Excel todas las bajas registradas.</p>
+    </div>
+    <p-button
+      [label]="generatingExcel() ? 'Generando...' : 'Exportar bajas a Excel'"
+      icon="pi pi-file-excel"
+      styleClass="export-excel-btn"
+      [disabled]="generatingExcel() || retiredTotal() === 0"
+      [loading]="generatingExcel()"
+      (onClick)="exportarExcel()"
+    />
+  </header>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-label">Equipos Dados de Baja</span>
+      <span class="stat-value">{{ retiredTotal() }}</span>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <p-message severity="error" [text]="errorMessage()!" styleClass="page-message" />
+  }
+
+  <section class="table-card">
+    <div class="section-bar">
+      <h2 class="section-title">Dar de baja</h2>
+      <p-iconfield class="search-field">
+        <p-inputicon styleClass="pi pi-search" />
+        <input
+          type="text"
+          pInputText
+          placeholder="Buscar por nombre, usuario, serie o inventario..."
+          [value]="activeSearch()"
+          (input)="activeSearch.set($any($event.target).value)"
+        />
+      </p-iconfield>
+    </div>
+
+    <div class="table-scroll">
+      <p-table [value]="filteredActiveAssets()" [loading]="loadingAssets()" [paginator]="true" [rows]="10" styleClass="assets-table">
+        <ng-template #header>
+          <tr>
+            <th>Nombre</th>
+            <th>Usuario</th>
+            <th>Entidad</th>
+            <th>Tipo</th>
+            <th>Modelo</th>
+            <th>N.° de Serie</th>
+            <th>N.° de Inventario</th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-asset>
+          <tr>
+            <td class="name-cell">{{ asset.name }}</td>
+            <td>
+              @if (asset.user) {
+                {{ asset.user }}
+              } @else {
+                <span class="unassigned-badge">Sin asignar</span>
+              }
+            </td>
+            <td>{{ asset.entity }}</td>
+            <td>{{ asset.type }}</td>
+            <td>{{ asset.model }}</td>
+            <td>{{ asset.serialNumber }}</td>
+            <td>{{ asset.inventoryNumber }}</td>
+            <td>
+              <p-button
+                label="Dar de baja"
+                icon="pi pi-ban"
+                severity="danger"
+                [outlined]="true"
+                size="small"
+                [loading]="retiringIds().has(asset.id)"
+                (onClick)="confirmRetire(asset)"
+              />
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+          <tr>
+            <td colspan="8" class="empty-row">No se encontraron equipos activos.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </section>
+
+  <section class="table-card">
+    <div class="section-bar">
+      <h2 class="section-title">Equipos dados de baja</h2>
+      <p-iconfield class="search-field">
+        <p-inputicon styleClass="pi pi-search" />
+        <input
+          type="text"
+          pInputText
+          placeholder="Buscar por nombre, usuario, serie o inventario..."
+          [value]="retiredSearch()"
+          (input)="retiredSearch.set($any($event.target).value)"
+        />
+      </p-iconfield>
+    </div>
+
+    <div class="table-scroll">
+      <p-table [value]="filteredRetiredAssets()" [loading]="loadingRetired()" [paginator]="true" [rows]="10" styleClass="assets-table">
+        <ng-template #header>
+          <tr>
+            <th>Nombre</th>
+            <th>Usuario</th>
+            <th>Entidad</th>
+            <th>Tipo</th>
+            <th>Modelo</th>
+            <th>N.° de Serie</th>
+            <th>N.° de Inventario</th>
+            <th>Fecha de Baja</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-asset>
+          <tr>
+            <td class="name-cell">{{ asset.name }}</td>
+            <td>
+              @if (asset.user) {
+                {{ asset.user }}
+              } @else {
+                <span class="unassigned-badge">Sin asignar</span>
+              }
+            </td>
+            <td>{{ asset.entity }}</td>
+            <td>{{ asset.type }}</td>
+            <td>{{ asset.model }}</td>
+            <td>{{ asset.serialNumber }}</td>
+            <td>{{ asset.inventoryNumber }}</td>
+            <td>{{ asset.updatedAt ? (asset.updatedAt | date: 'dd/MM/yyyy') : '—' }}</td>
+          </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+          <tr>
+            <td colspan="8" class="empty-row">No hay equipos dados de baja.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </section>
+</div>

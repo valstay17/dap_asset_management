@@ -1,5 +1,5 @@
-// const baseUrl = 'http://localhost:8086/dap/asset';
-const baseUrl = 'https://it.sobse.com.mx/dap/asset';
+const baseUrl = 'http://localhost:8086/dap/asset';
+//const baseUrl = 'https://it.sobse.com.mx/dap/asset';
 export const environment = {
   production: true,
   baseUrl: baseUrl,

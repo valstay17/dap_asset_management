@@ -120,6 +120,8 @@ let seedAssets: Asset[] = [
   },
 ];
 
+let retiredAssets: Asset[] = [];
+
 @Injectable({ providedIn: 'root' })
 export class MockAssetAdapter implements AssetPort {
   list(): Observable<Asset[]> {
@@ -159,5 +161,16 @@ export class MockAssetAdapter implements AssetPort {
   delete(id: string): Observable<void> {
     seedAssets = seedAssets.filter((existing) => existing.id !== id);
     return of(undefined).pipe(delay(LATENCY_MS));
+  }
+
+  listRetired(): Observable<Asset[]> {
+    return of([...retiredAssets]).pipe(delay(LATENCY_MS));
+  }
+
+  retire(asset: Asset): Observable<Asset> {
+    const retired: Asset = { ...asset, updatedAt: new Date().toISOString() };
+    seedAssets = seedAssets.filter((existing) => existing.id !== asset.id);
+    retiredAssets = [retired, ...retiredAssets];
+    return of(retired).pipe(delay(LATENCY_MS));
   }
 }

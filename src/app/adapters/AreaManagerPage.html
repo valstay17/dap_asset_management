@@ -29,6 +29,7 @@
           <th>Nombre</th>
           <th>Entidad</th>
           <th class="text-center">Estado</th>
+          <th class="actions-header">Acciones</th>
         </tr>
       </ng-template>
       <ng-template #body let-areaManager>
@@ -46,11 +47,23 @@
               (onClick)="toggleStatus(areaManager)"
             />
           </td>
+          <td>
+            <div class="actions-cell">
+              <p-button
+                icon="pi pi-pencil"
+                severity="secondary"
+                [text]="true"
+                [rounded]="true"
+                pTooltip="Editar jefe de área"
+                (onClick)="openEditDialog(areaManager)"
+              />
+            </div>
+          </td>
         </tr>
       </ng-template>
       <ng-template #emptymessage>
         <tr>
-          <td colspan="3" class="empty-row">No hay jefes de área registrados.</td>
+          <td colspan="4" class="empty-row">No hay jefes de área registrados.</td>
         </tr>
       </ng-template>
     </p-table>
@@ -58,7 +71,7 @@
 </div>
 
 <p-dialog
-  header="Nuevo Jefe de Área"
+  [header]="editingAreaManager() ? 'Editar Jefe de Área' : 'Nuevo Jefe de Área'"
   [modal]="true"
   [visible]="showCreateDialog()"
   (visibleChange)="showCreateDialog.set($event)"
@@ -93,7 +106,7 @@
 
     <div class="form-actions">
       <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="closeCreateDialog()" />
-      <p-button type="submit" [label]="submitting() ? 'Guardando...' : 'Guardar'" [loading]="submitting()" />
+      <p-button type="submit" [label]="submitting() ? 'Guardando...' : editingAreaManager() ? 'Guardar Cambios' : 'Guardar'" [loading]="submitting()" />
     </div>
   </form>
 </p-dialog>

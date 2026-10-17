@@ -103,6 +103,18 @@
   font-weight: 600;
 }
 
+.actions-header {
+  width: 6rem;
+  text-align: right;
+}
+
+.actions-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
 .empty-row {
   text-align: center;
   padding: 2rem;

@@ -1,0 +1,107 @@
+<div class="capture-page">
+  <header class="capture-header">
+    <div>
+      <h1>Captura de Impresoras</h1>
+      <p>Registra una nueva impresora en el inventario.</p>
+    </div>
+  </header>
+
+  <form class="capture-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="form-grid">
+      <div class="field-group">
+        <label for="inventoryNumber">Número de inventario</label>
+        <input
+          id="inventoryNumber"
+          type="text"
+          formControlName="inventoryNumber"
+          placeholder="123456"
+          [class.invalid]="isInvalid('inventoryNumber')"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="brand">Marca</label>
+        <input
+          id="brand"
+          type="text"
+          formControlName="brand"
+          placeholder="HP"
+          [class.invalid]="isInvalid('brand')"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="type">Tipo</label>
+        <input
+          id="type"
+          type="text"
+          formControlName="type"
+          placeholder="Láser"
+          [class.invalid]="isInvalid('type')"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="serialNumber">Número de serie</label>
+        <input
+          id="serialNumber"
+          type="text"
+          formControlName="serialNumber"
+          placeholder="PHBQ123456"
+          [class.invalid]="isInvalid('serialNumber')"
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="locationId">Ubicación</label>
+        <p-select
+          inputId="locationId"
+          formControlName="locationId"
+          [options]="locationOptions()"
+          optionLabel="label"
+          optionValue="id"
+          placeholder="Seleccionar ubicación..."
+          [class.invalid]="isInvalid('locationId')"
+          appendTo="body"
+          [filter]="true"
+          filterPlaceholder="Buscar ubicación..."
+        />
+      </div>
+      
+      <div class="field-group">
+        <label for="manufacturer">Fabricante</label>
+        <input
+          id="manufacturer"
+          type="text"
+          formControlName="manufacturer"
+          placeholder="HP"
+          [class.invalid]="isInvalid('manufacturer')"
+        />
+      </div>
+
+      <div class="field-group">
+        <label>Estado</label>
+        <div>
+          <p-button
+            type="button"
+            [label]="isActive() ? 'Activo' : 'Inactivo'"
+            [severity]="isActive() ? 'success' : 'danger'"
+            [outlined]="!isActive()"
+            (onClick)="toggleActive()"
+          />
+        </div>
+      </div>
+    </div>
+
+    @if (infoMessage()) {
+      <p-message severity="success" [text]="infoMessage()!" styleClass="w-full" />
+    }
+    @if (errorMessage()) {
+      <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
+    }
+
+    <div class="form-actions">
+      <p-button type="submit" label="Registrar impresora" icon="pi pi-save" [loading]="saving()" />
+    </div>
+  </form>
+</div>
