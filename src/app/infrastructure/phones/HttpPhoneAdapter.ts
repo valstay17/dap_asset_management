@@ -8,6 +8,7 @@ import { TokenService } from '../../tokenService';
 
 interface TelefonoDto {
   idTelefono: number;
+  personal: { idPersonal: number } | null;
   inventario: string | null;
   marca: string | null;
   modelo: string | null;
@@ -19,6 +20,7 @@ interface TelefonoDto {
 }
 
 interface TelefonoPayload {
+  personal: { idPersonal: number } | null;
   inventario: string;
   marca: string;
   modelo: string;
@@ -32,6 +34,7 @@ interface TelefonoPayload {
 function toPhone(dto: TelefonoDto): Phone {
   return {
     id: String(dto.idTelefono),
+    userId: dto.personal ? String(dto.personal.idPersonal) : '',
     inventoryNumber: dto.inventario ?? '',
     brand: dto.marca ?? '',
     model: dto.modelo ?? '',
@@ -43,24 +46,43 @@ function toPhone(dto: TelefonoDto): Phone {
   };
 }
 
+function toTelefonoPayload(input: NewPhone): TelefonoPayload {
+  return {
+    personal: input.userId ? { idPersonal: Number(input.userId) } : null,
+    inventario: input.inventoryNumber,
+    marca: input.brand,
+    modelo: input.model,
+    numeroSerie: input.serialNumber,
+    entidad: input.entityId ? { idEntidad: Number(input.entityId) } : null,
+    direccionIp: input.networkAddress || null,
+    extension: input.extension || null,
+    active: input.active,
+  };
+}
+
 @Injectable({ providedIn: 'root' })
 export class HttpPhoneAdapter implements PhonePort {
   private readonly http = inject(HttpClient);
   private readonly tokenService = inject(TokenService);
 
+  list(): Observable<Phone[]> {
+    const headers = this.tokenService.loggedHeader();
+    return this.http
+      .get<TelefonoDto[] | null>(environment.telefonoFindAll, { headers })
+      .pipe(map((dtos) => (dtos ?? []).map(toPhone)));
+  }
+
   create(input: NewPhone): Observable<Phone> {
     const headers = this.tokenService.loggedHeader();
-    const payload: TelefonoPayload = {
-      inventario: input.inventoryNumber,
-      marca: input.brand,
-      modelo: input.model,
-      numeroSerie: input.serialNumber,
-      entidad: input.entityId ? { idEntidad: Number(input.entityId) } : null,
-      direccionIp: input.networkAddress || null,
-      extension: input.extension || null,
-      active: input.active,
-    };
+    return this.http
+      .post<TelefonoDto>(environment.telefonoSave, toTelefonoPayload(input), { headers })
+      .pipe(map(toPhone));
+  }
 
-    return this.http.post<TelefonoDto>(environment.telefonoSave, payload, { headers }).pipe(map(toPhone));
+  update(id: string, changes: NewPhone): Observable<Phone> {
+    const headers = this.tokenService.loggedHeader();
+    return this.http
+      .put<TelefonoDto>(`${environment.telefonoUpdate}/${id}`, toTelefonoPayload(changes), { headers })
+      .pipe(map(toPhone));
   }
 }

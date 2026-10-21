@@ -1,5 +1,6 @@
 export interface Phone {
   id: string;
+  userId: string;
   inventoryNumber: string;
   brand: string;
   model: string;

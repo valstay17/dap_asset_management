@@ -1,5 +1,6 @@
 export interface Printer {
   id: string;
+  userId: string;
   inventoryNumber: string;
   brand: string;
   type: string;

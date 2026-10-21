@@ -8,6 +8,7 @@ import { TokenService } from '../../tokenService';
 
 interface MonitorDto {
   idMonitor: number;
+  personal: { idPersonal: number } | null;
   inventario: string | null;
   marca: string | null;
   modelo: string | null;
@@ -18,6 +19,7 @@ interface MonitorDto {
 }
 
 interface MonitorPayload {
+  personal: { idPersonal: number } | null;
   inventario: string;
   marca: string;
   modelo: string;
@@ -30,6 +32,7 @@ interface MonitorPayload {
 function toMonitor(dto: MonitorDto): Monitor {
   return {
     id: String(dto.idMonitor),
+    userId: dto.personal ? String(dto.personal.idPersonal) : '',
     inventoryNumber: dto.inventario ?? '',
     brand: dto.marca ?? '',
     model: dto.modelo ?? '',
@@ -40,23 +43,42 @@ function toMonitor(dto: MonitorDto): Monitor {
   };
 }
 
+function toMonitorPayload(input: NewMonitor): MonitorPayload {
+  return {
+    personal: input.userId ? { idPersonal: Number(input.userId) } : null,
+    inventario: input.inventoryNumber,
+    marca: input.brand,
+    modelo: input.model,
+    numeroSerie: input.serialNumber,
+    entidad: input.entityId ? { idEntidad: Number(input.entityId) } : null,
+    direccionIp: input.networkAddress || null,
+    active: input.active,
+  };
+}
+
 @Injectable({ providedIn: 'root' })
 export class HttpMonitorAdapter implements MonitorPort {
   private readonly http = inject(HttpClient);
   private readonly tokenService = inject(TokenService);
 
+  list(): Observable<Monitor[]> {
+    const headers = this.tokenService.loggedHeader();
+    return this.http
+      .get<MonitorDto[] | null>(environment.monitorFindAll, { headers })
+      .pipe(map((dtos) => (dtos ?? []).map(toMonitor)));
+  }
+
   create(input: NewMonitor): Observable<Monitor> {
     const headers = this.tokenService.loggedHeader();
-    const payload: MonitorPayload = {
-      inventario: input.inventoryNumber,
-      marca: input.brand,
-      modelo: input.model,
-      numeroSerie: input.serialNumber,
-      entidad: input.entityId ? { idEntidad: Number(input.entityId) } : null,
-      direccionIp: input.networkAddress || null,
-      active: input.active,
-    };
+    return this.http
+      .post<MonitorDto>(environment.monitorSave, toMonitorPayload(input), { headers })
+      .pipe(map(toMonitor));
+  }
 
-    return this.http.post<MonitorDto>(environment.monitorSave, payload, { headers }).pipe(map(toMonitor));
+  update(id: string, changes: NewMonitor): Observable<Monitor> {
+    const headers = this.tokenService.loggedHeader();
+    return this.http
+      .put<MonitorDto>(`${environment.monitorUpdate}/${id}`, toMonitorPayload(changes), { headers })
+      .pipe(map(toMonitor));
   }
 }

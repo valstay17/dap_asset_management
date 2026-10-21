@@ -110,6 +110,15 @@
                 pTooltip="Editar usuario"
                 (onClick)="openEditDialog(user)"
               />
+              <p-button
+                icon="pi pi-plus"
+                severity="secondary"
+                [text]="true"
+                [rounded]="true"
+                pTooltip="Agregar"
+                tooltipPosition="top"
+                (onClick)="openAssignDialog(user)"
+              />
             </div>
           </td>
         </tr>
@@ -184,4 +193,104 @@
       <p-button type="submit" [label]="submitting() ? 'Guardando...' : editingUser() ? 'Guardar Cambios' : 'Guardar Usuario'" [loading]="submitting()" />
     </div>
   </form>
+</p-dialog>
+
+<p-dialog
+  header="Asignaciones del usuario"
+  [modal]="true"
+  [visible]="showAssignDialog()"
+  (visibleChange)="showAssignDialog.set($event)"
+  [style]="{ width: '42rem' }"
+>
+  <div class="create-form">
+    @if (assigningUser(); as user) {
+      <div class="user-cell">
+        <div class="user-avatar">{{ initialsByUserId()[user.id] }}</div>
+        <div>
+          <p class="user-name">{{ user.firstName }} {{ user.lastName }}</p>
+          <p class="user-email">{{ user.entity }}</p>
+        </div>
+      </div>
+    }
+
+    <div class="assign-kinds">
+      @for (option of assignKindOptions; track option.value) {
+        <button
+          type="button"
+          class="assign-kind"
+          [class.assign-kind--active]="assignKind() === option.value"
+          (click)="selectAssignKind(option.value)"
+        >
+          <span class="material-symbols-outlined">{{ option.icon }}</span>
+          {{ option.label }}
+          <span class="assign-count">{{ assignedCounts()[option.value] }}</span>
+        </button>
+      }
+    </div>
+
+    @if (assignKind()) {
+      <div class="assign-panel">
+        <p class="assign-panel-title">{{ assignKindLabel() }} asignados</p>
+        @for (item of assignedItems(); track item.id) {
+          <div class="assigned-item">
+            <div>
+              <p class="user-name">{{ item.title }}</p>
+              <p class="user-email">{{ item.detail }}</p>
+            </div>
+            <p-button
+              icon="pi pi-times"
+              severity="danger"
+              [text]="true"
+              [rounded]="true"
+              [loading]="unassigningIds().has(item.id)"
+              pTooltip="Quitar asignación"
+              (onClick)="unassign(item.id)"
+            />
+          </div>
+        } @empty {
+          <p class="user-email">Este usuario no tiene {{ assignKindLabel().toLowerCase() }} asignados.</p>
+        }
+
+        <div class="field-group">
+          <label for="assignItem">Agregar disponible</label>
+          <div class="assign-add">
+            <p-select
+              inputId="assignItem"
+              [options]="availableItemOptions()"
+              optionLabel="label"
+              optionValue="id"
+              placeholder="Seleccionar..."
+              emptyMessage="No hay disponibles sin usuario."
+              emptyFilterMessage="Sin resultados."
+              appendTo="body"
+              [filter]="true"
+              filterPlaceholder="Buscar..."
+              scrollHeight="220px"
+              [ngModel]="assignItemId()"
+              (ngModelChange)="assignItemId.set($event)"
+            />
+            <p-button
+              type="button"
+              [label]="assignSubmitting() ? 'Agregando...' : 'Agregar'"
+              icon="pi pi-plus"
+              [disabled]="!assignItemId()"
+              [loading]="assignSubmitting()"
+              (onClick)="onAssignSubmit()"
+            />
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (assignMessage()) {
+      <p-message severity="success" [text]="assignMessage()!" styleClass="w-full" />
+    }
+    @if (assignErrorMessage()) {
+      <p-message severity="error" [text]="assignErrorMessage()!" styleClass="w-full" />
+    }
+
+    <div class="form-actions">
+      <p-button type="button" label="Cerrar" severity="secondary" [outlined]="true" (onClick)="closeAssignDialog()" />
+    </div>
+  </div>
 </p-dialog>

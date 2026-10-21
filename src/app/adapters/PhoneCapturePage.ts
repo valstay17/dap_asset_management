@@ -59,7 +59,7 @@ export class PhoneCapturePage implements OnInit {
     this.errorMessage.set(null);
     this.saving.set(true);
 
-    this.createPhoneUseCase.execute({ ...this.form.getRawValue(), active: true }).subscribe({
+    this.createPhoneUseCase.execute({ ...this.form.getRawValue(), userId: '', active: true }).subscribe({
       next: () => {
         this.saving.set(false);
         this.form.reset();

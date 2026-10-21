@@ -67,7 +67,7 @@ export class MonitorCapturePage implements OnInit {
     this.errorMessage.set(null);
     this.saving.set(true);
 
-    this.createMonitorUseCase.execute(this.form.getRawValue()).subscribe({
+    this.createMonitorUseCase.execute({ ...this.form.getRawValue(), userId: '' }).subscribe({
       next: () => {
         this.saving.set(false);
         this.form.reset();

@@ -1,5 +1,6 @@
 export interface Monitor {
   id: string;
+  userId: string;
   inventoryNumber: string;
   brand: string;
   model: string;

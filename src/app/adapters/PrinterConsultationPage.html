@@ -1,0 +1,206 @@
+<div class="consultation-page">
+  <header class="consultation-header">
+    <div>
+      <h1>Consulta de Impresoras</h1>
+      <p>Búsqueda de impresoras registradas por tipo, ubicación o estado.</p>
+    </div>
+    <p-button
+      [label]="generatingExcel() ? 'Generando...' : 'Exportar Excel'"
+      icon="pi pi-file-excel"
+      styleClass="export-excel-btn"
+      [disabled]="generatingExcel() || resultCount() === 0"
+      [loading]="generatingExcel()"
+      (onClick)="exportarExcel()"
+    />
+  </header>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-label">Total de Impresoras</span>
+      <span class="stat-value">{{ total() }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Resultados de la Consulta</span>
+      <span class="stat-value">{{ resultCount() }}</span>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="filters-bar">
+      <p-iconfield class="search-field">
+        <p-inputicon styleClass="pi pi-search" />
+        <input
+          type="text"
+          pInputText
+          placeholder="Buscar por inventario, serie o marca..."
+          [value]="searchFilter()"
+          (input)="onSearchFilterInput($any($event.target).value)"
+        />
+      </p-iconfield>
+
+      <p-select
+        [options]="typeOptions()"
+        placeholder="Todos los tipos"
+        [showClear]="true"
+        [ngModel]="typeFilter()"
+        (onChange)="typeFilter.set($event.value)"
+        (onClear)="typeFilter.set(null)"
+        styleClass="filter-select"
+      />
+
+      <p-select
+        [options]="locationOptions()"
+        placeholder="Todas las ubicaciones"
+        [showClear]="true"
+        [ngModel]="locationFilter()"
+        (onChange)="locationFilter.set($event.value)"
+        (onClear)="locationFilter.set(null)"
+        styleClass="filter-select"
+      />
+
+      <p-select
+        [options]="statusOptions"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Todos los estados"
+        [showClear]="true"
+        [ngModel]="statusFilter()"
+        (onChange)="statusFilter.set($event.value)"
+        (onClear)="statusFilter.set(null)"
+        styleClass="filter-select"
+      />
+
+      @if (hasActiveFilters()) {
+        <p-button label="Limpiar filtros" icon="pi pi-filter-slash" severity="secondary" [outlined]="true" (onClick)="clearFilters()" />
+      }
+    </div>
+
+    <div class="table-scroll">
+      <p-table [value]="filteredPrinters()" [loading]="loading()" styleClass="assets-table">
+        <ng-template #header>
+          <tr>
+            <th>N.° de Inventario</th>
+            <th>Marca</th>
+            <th>Tipo</th>
+            <th>N.° de Serie</th>
+            <th>Fabricante</th>
+            <th>Ubicación</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-printer>
+          <tr>
+            <td class="name-cell">{{ printer.inventoryNumber }}</td>
+            <td>{{ printer.brand }}</td>
+            <td>{{ printer.type }}</td>
+            <td>{{ printer.serialNumber }}</td>
+            <td>{{ printer.manufacturer }}</td>
+            <td>
+              @if (printer.location) {
+                {{ printer.location }}
+              } @else {
+                <span class="unassigned-badge">Sin asignar</span>
+              }
+            </td>
+            <td>
+              <p-tag [value]="printer.active ? 'Activo' : 'Inactivo'" [severity]="printer.active ? 'success' : 'danger'" />
+            </td>
+            <td>
+              <div class="actions-cell">
+                <p-button
+                  icon="pi pi-pencil"
+                  severity="secondary"
+                  [text]="true"
+                  [rounded]="true"
+                  pTooltip="Editar impresora"
+                  (onClick)="openEditDialog(printer)"
+                />
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+          <tr>
+            <td colspan="8" class="empty-row">No se encontraron impresoras con estos criterios.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  header="Editar Impresora"
+  [modal]="true"
+  [visible]="showEditDialog()"
+  (visibleChange)="showEditDialog.set($event)"
+  [style]="{ width: '54rem' }"
+>
+  <form class="edit-form" [formGroup]="editForm" (ngSubmit)="onEditSubmit()" novalidate>
+    <div class="form-grid">
+      <div class="field-group">
+        <label for="edit-inventoryNumber">Número de inventario</label>
+        <input id="edit-inventoryNumber" type="text" pInputText formControlName="inventoryNumber" [class.invalid]="isEditInvalid('inventoryNumber')" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-brand">Marca</label>
+        <input id="edit-brand" type="text" pInputText formControlName="brand" [class.invalid]="isEditInvalid('brand')" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-type">Tipo</label>
+        <input id="edit-type" type="text" pInputText formControlName="type" [class.invalid]="isEditInvalid('type')" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-serialNumber">Número de serie</label>
+        <input id="edit-serialNumber" type="text" pInputText formControlName="serialNumber" [class.invalid]="isEditInvalid('serialNumber')" />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-location">Ubicación</label>
+        <p-select
+          inputId="edit-location"
+          formControlName="locationId"
+          [options]="locationFormOptions()"
+          optionLabel="label"
+          optionValue="id"
+          placeholder="Seleccionar ubicación..."
+          [class.invalid]="isEditInvalid('locationId')"
+          appendTo="body"
+          [filter]="true"
+          filterPlaceholder="Buscar ubicación..."
+        />
+      </div>
+
+      <div class="field-group">
+        <label for="edit-manufacturer">Fabricante</label>
+        <input id="edit-manufacturer" type="text" pInputText formControlName="manufacturer" [class.invalid]="isEditInvalid('manufacturer')" />
+      </div>
+
+      <div class="field-group">
+        <label>Estado</label>
+        <div>
+          <p-button
+            type="button"
+            [label]="isEditActive() ? 'Activo' : 'Inactivo'"
+            [severity]="isEditActive() ? 'success' : 'danger'"
+            [outlined]="!isEditActive()"
+            (onClick)="toggleEditActive()"
+          />
+        </div>
+      </div>
+    </div>
+
+    @if (editErrorMessage()) {
+      <p-message severity="error" [text]="editErrorMessage()!" styleClass="w-full" />
+    }
+
+    <div class="form-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" (onClick)="closeEditDialog()" />
+      <p-button type="submit" [label]="editSubmitting() ? 'Guardando...' : 'Guardar cambios'" [loading]="editSubmitting()" />
+    </div>
+  </form>
+</p-dialog>

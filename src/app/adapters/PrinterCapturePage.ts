@@ -68,7 +68,7 @@ export class PrinterCapturePage implements OnInit {
     this.errorMessage.set(null);
     this.saving.set(true);
 
-    this.createPrinterUseCase.execute(this.form.getRawValue()).subscribe({
+    this.createPrinterUseCase.execute({ ...this.form.getRawValue(), userId: '' }).subscribe({
       next: () => {
         this.saving.set(false);
         this.form.reset({ active: true });
